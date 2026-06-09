@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ekibimiz | Alidea</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="dark-theme">
+    <nav class="navbar dark-navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">Alidea.</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Ana Sayfa</a></li>
+                <li><a href="portfolio.html">Portföy</a></li>
+                <li><a href="iarone.html">Iarone</a></li>
+                <li><a href="websitesgo.html">Websitesgo</a></li>
+                <li><a href="team.html" style="color: #fff;">Ekip</a></li>
+            </ul>
+            <a id="navOpenModalBtn" class="btn btn-primary" style="cursor:pointer;">Projeye Başla</a>
+        </div>
+    </nav>
+
+    <main class="team-main">
+        <div class="team-header slide-up">
+            <h1>Kurucu Ekip</h1>
+            <p>Strateji, Prodüksiyon ve Teknolojinin Kusursuz Kesişimi.</p>
+        </div>
+
+        <section class="bento-container slide-up">
+            <!-- Salih Sönmez -->
+            <div class="bento-card glass-panel">
+                <div class="media-container">
+                    <div class="portrait-overlay" style="background-image: url('salih.jpeg');"></div>
+                </div>
+                <div class="bento-content">
+                    <div class="bento-header">
+                        <h2>Salih Sönmez</h2>
+                        <span class="motto">"Estetik, detaylarda gizlidir."</span>
+                    </div>
+                    <p class="role-desc">Premiere Pro ve CapCut uzmanı. Sinematik kurgular, hareket takibi ve yüksek etkileşimli reklam tasarımları üretir.</p>
+                    <div class="stack-badges">
+                        <span class="badge glass-badge">Premiere Pro</span>
+                        <span class="badge glass-badge">CapCut Uzmanı</span>
+                        <span class="badge glass-badge">Kreatif Direktör</span>
+                    </div>
+                    <div class="social-links">
+                        <a href="https://www.instagram.com/sallushie/" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="https://www.youtube.com/@sallushie" target="_blank"><i class="fa-brands fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ali Kartal -->
+            <div class="bento-card glass-panel">
+                <div class="media-container">
+                    <div class="portrait-overlay" style="background-image: url('ali.jpeg');"></div>
+                </div>
+                <div class="bento-content">
+                    <div class="bento-header">
+                        <h2>Ali Kartal</h2>
+                        <span class="motto">"Gelecek, onu kurgulayanlarındır."</span>
+                    </div>
+                    <p class="role-desc">Ajans stratejisini çizerken, @benalikartal kimliğiyle kurgu ve AI içerikleri üreterek güçlü topluluk bağları kurar.</p>
+                    <div class="stack-badges">
+                        <span class="badge glass-badge">Dijital Strateji</span>
+                        <span class="badge glass-badge">AI Çözümleri</span>
+                        <span class="badge glass-badge">İçerik Yönetimi</span>
+                    </div>
+                    <div class="social-links">
+                        <a href="https://www.instagram.com/benalikartal" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="https://www.youtube.com/@benalikartal" target="_blank"><i class="fa-brands fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ömer Faruk Şaşkan -->
+            <div class="bento-card glass-panel">
+                <div class="media-container">
+                    <div class="portrait-overlay" style="background-image: url('omer.jpeg');"></div>
+                </div>
+                <div class="bento-content">
+                    <div class="bento-header">
+                        <h2>Ömer Faruk Şaşkan</h2>
+                        <span class="motto">"Kod, tasarımın görünmez kalbidir."</span>
+                    </div>
+                    <p class="role-desc">Iarone AR SaaS platformu ve Websitesgo e-ticaret altyapısı gibi markaları öne çıkaran inovatif teknolojik çözümlerin mimarı.</p>
+                    <div class="stack-badges">
+                        <span class="badge glass-badge">Web Geliştirme</span>
+                        <span class="badge glass-badge">SaaS Mimari</span>
+                        <span class="badge glass-badge">UI/UX Code</span>
+                    </div>
+                    <div class="social-links">
+                        <a href="#"><i class="fa-brands fa-github"></i></a>
+                        <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Partners Section -->
+        <section class="partners-section slide-up">
+            <h3>Ekosistemimiz</h3>
+            <div class="partners-grid" style="grid-template-columns: repeat(3, 1fr);">
+                <div class="partner-card glass-panel"><span>Alidea</span><br>Dijital Reklam Ajansı</div>
+                <div class="partner-card glass-panel"><span>Websitesgo</span><br>E-ticaret ve Web Site Hizmeti</div>
+                <div class="partner-card glass-panel"><span>Iarone</span><br>3D & AR Projesi</div>
+            </div>
+        </section>
+    </main>
+
+    <!-- PROJECT LEAD MODAL -->
+    <div id="leadModal" class="modal-overlay hidden">
+        <div class="modal-content premium-modal split-modal">
+            <button class="close-modal" id="closeModalBtn">&times;</button>
+            
+            <div class="modal-left">
+                <div class="modal-left-content">
+                    <h2 class="modal-brand">Alidea.</h2>
+                    <h3 class="modal-slogan">Dijital Geleceğinizi<br>Birlikte İnşa Edelim</h3>
+                    <p class="modal-desc">Sıradan bir ajans değiliz. Markanız için en yenilikçi çözümleri üreten bir inovasyon merkeziyiz.</p>
+                    <div class="modal-contact">
+                        <div class="contact-item"><i class="fa-solid fa-envelope"></i> info@alidea.com</div>
+                        <div class="contact-item"><i class="fa-solid fa-phone"></i> +90 (850) 123 45 67</div>
+                    </div>
+                </div>
+                <!-- Decorative Elements -->
+                <div class="modal-circle-1"></div>
+                <div class="modal-circle-2"></div>
+            </div>
+
+            <div class="modal-right">
+                <div id="formContentWrap">
+                    <div class="modal-header">
+                        <h3>Projeye Başla</h3>
+                        <p>Hangi alanda birlikte çalışacağız?</p>
+                    </div>
+
+                    <form id="leadForm" class="lead-form">
+                        <div class="form-group category-selection premium-categories">
+                            <label class="category-btn">
+                                <input type="radio" name="project_category" value="Yazılım ve Teknoloji" required>
+                                <span class="btn-design">Yazılım ve Teknoloji</span>
+                            </label>
+                            <label class="category-btn">
+                                <input type="radio" name="project_category" value="Web Sitesi">
+                                <span class="btn-design">Web Sitesi</span>
+                            </label>
+                            <label class="category-btn">
+                                <input type="radio" name="project_category" value="Dijital Reklam">
+                                <span class="btn-design">Dijital Reklam</span>
+                            </label>
+                            <label class="category-btn">
+                                <input type="radio" name="project_category" value="Iarone Projesi">
+                                <span class="btn-design">Iarone Projesi</span>
+                            </label>
+                            <label class="category-btn">
+                                <input type="radio" name="project_category" value="Video Editörlüğü">
+                                <span class="btn-design">Video Editörlüğü</span>
+                            </label>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group modern-input-group">
+                                <input type="email" id="leadEmail" name="email" required placeholder=" " class="glass-input premium-input modern-input">
+                                <label for="leadEmail">E-posta Adresiniz</label>
+                            </div>
+                            <div class="form-group modern-input-group">
+                                <input type="tel" id="leadPhone" name="phone" required placeholder=" " class="glass-input premium-input modern-input">
+                                <label for="leadPhone">Telefon Numaranız</label>
+                            </div>
+                        </div>
+
+                        <div class="form-group modern-input-group">
+                            <textarea id="leadMessage" name="message" required rows="3" placeholder=" " class="glass-input premium-input modern-input"></textarea>
+                            <label for="leadMessage">Proje Detayları ve Talepleriniz</label>
+                        </div>
+
+                        <button type="submit" class="btn btn-massive submit-btn premium-submit" id="leadSubmitBtn">
+                            <span class="btn-text">Talebi Gönder <i class="fa-solid fa-arrow-right" style="margin-left: 8px;"></i></span>
+                            <div class="spinner-ring" style="display:none;" id="submitSpinner"></div>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Premium Success State -->
+                <div id="formSuccessMessage" class="success-overlay hidden">
+                    <div class="success-icon-wrap">
+                        <div class="success-icon-bg"></div>
+                        <i class="fa-solid fa-check"></i>
+                    </div>
+                    <h3 class="success-title">Talep Gönderildi!</h3>
+                    <p class="success-desc">Ekibimiz detayları inceleyip sizinle en kısa sürede iletişime geçecek. Birlikte harika işler çıkaracağız!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="dark-footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <a href="index.html" class="logo" style="color: #fff;">Alidea.</a>
+                <p style="margin-top: 1rem; color: #888;">Premium Digital Agency.</p>
+            </div>
+        </div>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>

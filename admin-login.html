@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Girişi | Alidea</title>
+  <meta name="description" content="Alidea yönetim paneline güvenli giriş yapın." />
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      /* Minimalist color palette */
+      --bg-main: #f9fafb;
+      --card-bg: #ffffff;
+      --text-primary: #111827;
+      --text-sec: #6b7280;
+      --border-light: #e5e7eb;
+      --border-focus: #111827;
+      
+      /* Dynamic theme colors for panels */
+      --theme-saas: #111827;     /* Pure dark/black for default */
+      --theme-musteri: #059669;  /* Elegant deep green */
+      --theme-mesaj: #d97706;    /* Elegant amber/gold */
+      
+      --active-color: var(--theme-musteri);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg-main);
+      color: var(--text-primary);
+      overflow: hidden;
+      position: relative;
+      /* Subtle noise texture for premium feel */
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.02'/%3E%3C/svg%3E");
+    }
+
+    /* ── LOGIN CARD ── */
+    .login-wrapper {
+      width: 100%;
+      max-width: 440px;
+      margin: 2rem;
+      position: relative;
+      z-index: 10;
+      animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .login-card {
+      background: var(--card-bg);
+      border-radius: 20px;
+      padding: 24px 40px 48px 40px;
+      box-shadow: 
+        0 4px 6px -1px rgba(0, 0, 0, 0.02), 
+        0 20px 40px -10px rgba(0, 0, 0, 0.05);
+      border: 1px solid rgba(0,0,0,0.04);
+    }
+
+    /* ── BRAND ── */
+    .brand {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .brand-logo {
+      height: 100px;
+      width: auto;
+      object-fit: contain;
+    }
+
+    /* ── SEGMENTED CONTROL (TABS) ── */
+    .tabs-wrapper {
+      background: #f3f4f6;
+      border-radius: 12px;
+      padding: 4px;
+      display: flex;
+      margin-bottom: 36px;
+      position: relative;
+    }
+
+    .tab {
+      flex: 1;
+      text-align: center;
+      padding: 10px 0;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-sec);
+      cursor: pointer;
+      position: relative;
+      z-index: 2;
+      transition: color 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .tab svg {
+      width: 14px;
+      height: 14px;
+      stroke-width: 2.2;
+      opacity: 0.6;
+      transition: opacity 0.3s;
+    }
+
+    .tab.active {
+      color: var(--text-primary);
+    }
+    .tab.active svg {
+      opacity: 1;
+    }
+
+    .tab-slider {
+      position: absolute;
+      top: 4px;
+      bottom: 4px;
+      left: 4px;
+      width: calc((100% - 8px) / 3);
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+      z-index: 1;
+      transition: transform 0.4s cubic-bezier(0.2, 1, 0.2, 1);
+    }
+
+    /* Active positions for the slider */
+    .tabs-wrapper[data-active="saas"] .tab-slider { transform: translateX(0%); }
+    .tabs-wrapper[data-active="musteri"] .tab-slider { transform: translateX(100%); }
+    .tabs-wrapper[data-active="mesaj"] .tab-slider { transform: translateX(200%); }
+
+    /* ── HEADER ── */
+    .panel-header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    .panel-title {
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      margin-bottom: 8px;
+      color: var(--text-primary);
+    }
+    .panel-subtitle {
+      font-size: 14px;
+      color: var(--text-sec);
+      font-weight: 400;
+    }
+
+    /* ── FORM ── */
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+    .input-wrapper {
+      position: relative;
+    }
+    .form-input {
+      width: 100%;
+      padding: 12px 14px;
+      background: #fff;
+      border: 1px solid var(--border-light);
+      border-radius: 10px;
+      color: var(--text-primary);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      outline: none;
+      transition: all 0.2s ease;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.01);
+    }
+    .form-input::placeholder {
+      color: #9ca3af;
+    }
+    .form-input:focus {
+      border-color: var(--active-color);
+      box-shadow: 0 0 0 1px var(--active-color), 0 2px 4px rgba(0,0,0,0.02);
+    }
+
+    .form-options {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 24px;
+      margin-bottom: 32px;
+    }
+    
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--text-sec);
+      user-select: none;
+    }
+    .checkbox-label input[type="checkbox"] {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 16px;
+      height: 16px;
+      border: 1px solid var(--border-light);
+      border-radius: 4px;
+      background: #fff;
+      position: relative;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .checkbox-label input[type="checkbox"]:checked {
+      background: var(--active-color);
+      border-color: var(--active-color);
+    }
+    .checkbox-label input[type="checkbox"]:checked::after {
+      content: '';
+      position: absolute;
+      left: 4px;
+      top: 1px;
+      width: 4px;
+      height: 8px;
+      border: solid white;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+    }
+
+    .forgot-link {
+      font-size: 13px;
+      color: var(--text-sec);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .forgot-link:hover {
+      color: var(--active-color);
+    }
+
+    /* ── ERROR MSG ── */
+    .error-msg {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      background: #fef2f2;
+      color: #b91c1c;
+      padding: 12px 14px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 24px;
+      border: 1px solid #fee2e2;
+      animation: shake 0.4s ease;
+    }
+    .error-msg.visible { display: flex; }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-4px); }
+      40%, 80% { transform: translateX(4px); }
+    }
+
+    /* ── BUTTON ── */
+    .btn-login {
+      width: 100%;
+      padding: 12px 16px;
+      border: none;
+      border-radius: 10px;
+      background: var(--active-color);
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s, background-color 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 44px;
+    }
+    .btn-login:hover {
+      transform: translateY(-1px);
+      filter: brightness(0.9);
+    }
+    .btn-login:active {
+      transform: translateY(0);
+    }
+    
+    .btn-text { transition: opacity 0.2s; }
+    .btn-login.loading .btn-text { opacity: 0; }
+    
+    .btn-spinner {
+      display: none;
+      position: absolute;
+    }
+    .btn-login.loading .btn-spinner { display: flex; }
+    .spinner-ring {
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── DIVIDER ── */
+    .demo-info {
+      text-align: center;
+      margin-top: 32px;
+      font-size: 12px;
+      color: #9ca3af;
+    }
+
+    /* ── SUCCESS ── */
+    .form-content { transition: opacity 0.3s; }
+    .form-content.hidden { display: none; }
+    
+    .success-overlay {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 40px 0;
+      animation: fadeIn 0.4s ease;
+    }
+    .success-overlay.visible { display: flex; }
+    
+    .success-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: #ecfdf5;
+      color: #10b981;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+      animation: popIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+    .success-icon svg {
+      width: 32px;
+      height: 32px;
+    }
+    @keyframes popIn { 
+      from { transform: scale(0.5); opacity: 0; } 
+      to { transform: scale(1); opacity: 1; } 
+    }
+    .success-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+      letter-spacing: -0.02em;
+    }
+    .success-subtitle {
+      font-size: 14px;
+      color: var(--text-sec);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-wrapper">
+    <div class="login-card" id="loginCard">
+
+      <!-- Brand -->
+      <div class="brand">
+        <!-- Using a clean logo approach. If user has 'alidea_logo.png', it's here. 
+             If it fails to load, the alt text provides a clean fallback. -->
+        <img src="alidea_logo.png" alt="Alidea." class="brand-logo" onerror="this.outerHTML='<span style=\'font-size:24px; font-weight:700; letter-spacing:-0.05em; color:#111827;\'>Alidea.</span>'" />
+      </div>
+
+      <!-- Segmented Control Tabs -->
+      <div class="tabs-wrapper" data-active="musteri" id="tabsWrapper">
+        <div class="tab-slider"></div>
+        <div class="tab" data-panel="saas" onclick="switchPanel('saas')">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          SaaS
+        </div>
+        <div class="tab active" data-panel="musteri" onclick="switchPanel('musteri')">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+          Müşteri
+        </div>
+        <div class="tab" data-panel="mesaj" onclick="switchPanel('mesaj')">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+          Mesaj
+        </div>
+      </div>
+
+      <!-- Form Content -->
+      <div class="form-content" id="formContent">
+        <div class="panel-header">
+          <h1 class="panel-title" id="panelTitle">Özel Müşteri Paneli</h1>
+          <p class="panel-subtitle" id="panelSubtitle">Müşterilerinize özel alana girin.</p>
+        </div>
+
+        <div class="error-msg" id="errorMsg">
+          <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          <span id="errorText">Giriş bilgileri hatalı.</span>
+        </div>
+
+        <form id="loginForm" novalidate>
+          <div class="form-group">
+            <label class="form-label" for="username">Kullanıcı Adı</label>
+            <div class="input-wrapper">
+              <input class="form-input" type="text" id="username" name="username" placeholder="Kullanıcı Adı" autocomplete="username" required />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="password">Şifre</label>
+            <div class="input-wrapper">
+              <input class="form-input" type="password" id="password" name="password" placeholder="••••••••" autocomplete="current-password" required />
+            </div>
+          </div>
+
+          <div class="form-options">
+            <label class="checkbox-label">
+              <input type="checkbox" id="rememberMe" />
+              Beni hatırla
+            </label>
+            <a href="#" class="forgot-link">Şifremi unuttum</a>
+          </div>
+
+          <button type="submit" class="btn-login" id="loginBtn">
+            <span class="btn-text" id="btnText">Paneli Aç</span>
+            <span class="btn-spinner"><div class="spinner-ring"></div></span>
+          </button>
+        </form>
+
+
+      </div>
+
+      <!-- Success State -->
+      <div class="success-overlay" id="successOverlay">
+        <div class="success-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+        </div>
+        <div class="success-title">Başarıyla Giriş Yapıldı</div>
+        <p class="success-subtitle" id="successSub">Panele yönlendiriliyorsunuz...</p>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // ── Panel Definitions ──
+    const PANELS = {
+      saas: {
+        title:      'SaaS Paneli',
+        subtitle:   'Altyapı yönetimine giriş yapın.',
+        btnText:    'Giriş Yap',
+        redirect:   'admin-dashboard.html?panel=saas',
+        themeColor: 'var(--theme-saas)',
+      },
+      musteri: {
+        title:      'Özel Müşteri Paneli',
+        subtitle:   'Müşterilerinize özel alana girin.',
+        btnText:    'Paneli Aç',
+        redirect:   'special-customer-dashboard.html',
+        themeColor: 'var(--theme-musteri)',
+      },
+      mesaj: {
+        title:      'Gelen Kutusu',
+        subtitle:   'Müşteri taleplerini görüntüleyin.',
+        btnText:    'Mesajları Aç',
+        redirect:   'messages-dashboard.html',
+        themeColor: 'var(--theme-mesaj)',
+      },
+    };
+
+    let activePanel = 'musteri';
+
+    function switchPanel(key) {
+      if(activePanel === key) return;
+      activePanel = key;
+      const p = PANELS[key];
+
+      // Update UI texts
+      document.getElementById('panelTitle').textContent = p.title;
+      document.getElementById('panelSubtitle').textContent = p.subtitle;
+      document.getElementById('btnText').textContent = p.btnText;
+
+      // Update Theme Color dynamically
+      document.documentElement.style.setProperty('--active-color', p.themeColor);
+
+      // Update Tabs active state & slider
+      document.getElementById('tabsWrapper').setAttribute('data-active', key);
+      const tabs = document.querySelectorAll('.tab');
+      tabs.forEach(t => t.classList.remove('active'));
+      document.querySelector(`.tab[data-panel="${key}"]`).classList.add('active');
+
+      // Clear Errors
+      document.getElementById('errorMsg').classList.remove('visible');
+    }
+
+    // ── Login Logic ──
+    const form          = document.getElementById('loginForm');
+    const loginBtn      = document.getElementById('loginBtn');
+    const errorMsg      = document.getElementById('errorMsg');
+    const errorText     = document.getElementById('errorText');
+    const pwInput       = document.getElementById('password');
+    const formContent   = document.getElementById('formContent');
+    const successOverlay= document.getElementById('successOverlay');
+
+    // Clear error on input
+    [document.getElementById('username'), pwInput].forEach(el => {
+      el.addEventListener('input', () => errorMsg.classList.remove('visible'));
+    });
+
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      const username = document.getElementById('username').value.trim();
+      const password = pwInput.value;
+
+      if (!username || !password) { 
+        showError('Lütfen tüm alanları doldurun.'); 
+        return; 
+      }
+
+      // Start loading
+      loginBtn.classList.add('loading');
+      loginBtn.disabled = true;
+      errorMsg.classList.remove('visible');
+
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password }),
+        });
+
+        const data = await res.json();
+
+        if (res.ok && data.success) {
+          // Başarılı giriş
+          loginBtn.classList.remove('loading');
+          formContent.classList.add('hidden');
+          successOverlay.classList.add('visible');
+          setTimeout(() => {
+            // Admin ise seçili panele, müşteri ise kendi dashboarduna
+            if (data.role === 'admin') {
+              window.location.href = PANELS[activePanel].redirect;
+            } else {
+              window.location.href = data.redirect;
+            }
+          }, 1500);
+        } else {
+          // Hatalı giriş
+          loginBtn.classList.remove('loading');
+          loginBtn.disabled = false;
+          showError(data.error || 'Giriş bilgileri hatalı.');
+          
+          // Shake animasyonu
+          const card = document.getElementById('loginCard');
+          card.style.animation = 'none';
+          void card.offsetWidth;
+          card.style.animation = 'shake 0.4s ease';
+        }
+      } catch (err) {
+        loginBtn.classList.remove('loading');
+        loginBtn.disabled = false;
+        showError('Sunucuya bağlanılamadı. Lütfen tekrar deneyin.');
+      }
+    });
+
+    function showError(msg) {
+      errorText.textContent = msg;
+      errorMsg.classList.add('visible');
+    }
+  </script>
+</body>
+</html>

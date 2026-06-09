@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Websitesgo | E-Ticaret ve Web Çözümleri</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="light-theme">
+    <nav class="navbar light-navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">Alidea.</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Ana Sayfa</a></li>
+                <li><a href="portfolio.html">Portföy</a></li>
+                <li><a href="iarone.html">Iarone</a></li>
+                <li><a href="websitesgo.html" style="color: #111; font-weight: 600;">Websitesgo</a></li>
+                <li><a href="team.html">Ekip</a></li>
+            </ul>
+            <a id="navOpenModalBtn" class="btn btn-primary" style="cursor:pointer;">Projeye Başla</a>
+        </div>
+    </nav>
+
+    <main class="websitesgo-main">
+        <section class="websitesgo-hero slide-up">
+            <span class="wg-badge">Websitesgo Altyapısı</span>
+            <h2>Fikirleri yüksek performanslı dijital varlıklara dönüştürüyoruz.</h2>
+            <p>Websitesgo; standart şablonların dışına çıkarak, markaların hız, SEO ve yüksek dönüşüm ihtiyaçlarına göre sıfırdan inşa edilmiş kurumsal web ve e-ticaret altyapısıdır.</p>
+        </section>
+
+        <section class="websitesgo-features slide-up">
+            <div class="wg-grid">
+                <!-- Kart 1 -->
+                <div class="wg-card">
+                    <div class="wg-icon"><i class="fa-solid fa-cart-shopping"></i></div>
+                    <h3>Özel E-Ticaret Mimarisi</h3>
+                    <p>Sürtünmesiz bir satın alma deneyimi ile sepeti terk etme oranlarını düşürüyoruz. Ürün listelemeden ödeme adımlarına kadar her detayı dönüşüm odaklı optimize ediyoruz.</p>
+                </div>
+                <!-- Kart 2 -->
+                <div class="wg-card">
+                    <div class="wg-icon"><i class="fa-solid fa-bolt"></i></div>
+                    <h3>Kusursuz Hız & Performans</h3>
+                    <p>Core Web Vitals skorlarında tam başarı. Temiz kod yapısı ve optimize edilmiş sunucu mimarisi sayesinde milisaniyeler içinde açılan sayfalar.</p>
+                </div>
+                <!-- Kart 3 -->
+                <div class="wg-card">
+                    <div class="wg-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
+                    <h3>Sıfırdan SEO Odaklı Yapı</h3>
+                    <p>SEO sonradan eklenen bir eklenti değil; altyapımızın temelidir. Google algoritmalarıyla tam uyumlu semantik kodlama ve temiz URL hiyerarşisi.</p>
+                </div>
+                <!-- Kart 4 -->
+                <div class="wg-card">
+                    <div class="wg-icon"><i class="fa-solid fa-briefcase"></i></div>
+                    <h3>Terzi Usulü Kurumsal Siteler</h3>
+                    <p>Markanızın vizyonunu ve dijital kimliğini kusursuz bir şekilde yansıtan; tamamen esnek ve ölçeklenebilir çözümler.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Showcase Image Section -->
+        <section class="websitesgo-showcase slide-up" style="max-width: 1200px; margin: 5rem auto 2rem; padding: 0 2rem; text-align: center;">
+            <div style="border-radius: 24px; overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,0.08); border: 1px solid rgba(0,0,0,0.05); display: inline-block;">
+                <img src="ornek.png" alt="Websitesgo Örnek Tasarım" style="width: 100%; height: auto; display: block; transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
+            </div>
+        </section>
+    </main>
+
+    <!-- PROJECT LEAD MODAL -->
+    <div id="leadModal" class="modal-overlay hidden">
+        <div class="modal-content premium-modal split-modal">
+            <button class="close-modal" id="closeModalBtn">&times;</button>
+            
+            <div class="modal-left">
+                <div class="modal-left-content">
+                    <h2 class="modal-brand">Alidea.</h2>
+                    <h3 class="modal-slogan">Dijital Geleceğinizi<br>Birlikte İnşa Edelim</h3>
+                    <p class="modal-desc">Sıradan bir ajans değiliz. Markanız için en yenilikçi çözümleri üreten bir inovasyon merkeziyiz.</p>
+                    <div class="modal-contact">
+                        <div class="contact-item"><i class="fa-solid fa-envelope"></i> info@alidea.com</div>
+                        <div class="contact-item"><i class="fa-solid fa-phone"></i> +90 (850) 123 45 67</div>
+                    </div>
+                </div>
+                <!-- Decorative Elements -->
+                <div class="modal-circle-1"></div>
+                <div class="modal-circle-2"></div>
+            </div>
+
+            <div class="modal-right">
+                <div id="formContentWrap">
+                    <div class="modal-header">
+                        <h3>Projeye Başla</h3>
+                        <p>Hangi alanda birlikte çalışacağız?</p>
+                    </div>
+
+                    <form id="leadForm" class="lead-form">
+                        <div class="form-group category-selection premium-categories">
+                            <label class="category-btn">
+                                <input type="radio" name="project_category" value="Yazılım ve Teknoloji" required>
+                                <span class="btn-design">Yazılım ve Teknoloji</span>
+                            </label>
+                            <label class="category-btn">
+                                <input type="radio" name="project_category" value="Web Sitesi">
+                                <span class="btn-design">Web Sitesi</span>
+                            </label>
+                            <label class="category-btn">
+                                <input type="radio" name="project_category" value="Dijital Reklam">
+                                <span class="btn-design">Dijital Reklam</span>
+                            </label>
+                            <label class="category-btn">
+                                <input type="radio" name="project_category" value="Iarone Projesi">
+                                <span class="btn-design">Iarone Projesi</span>
+                            </label>
+                            <label class="category-btn">
+                                <input type="radio" name="project_category" value="Video Editörlüğü">
+                                <span class="btn-design">Video Editörlüğü</span>
+                            </label>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group modern-input-group">
+                                <input type="email" id="leadEmail" name="email" required placeholder=" " class="glass-input premium-input modern-input">
+                                <label for="leadEmail">E-posta Adresiniz</label>
+                            </div>
+                            <div class="form-group modern-input-group">
+                                <input type="tel" id="leadPhone" name="phone" required placeholder=" " class="glass-input premium-input modern-input">
+                                <label for="leadPhone">Telefon Numaranız</label>
+                            </div>
+                        </div>
+
+                        <div class="form-group modern-input-group">
+                            <textarea id="leadMessage" name="message" required rows="3" placeholder=" " class="glass-input premium-input modern-input"></textarea>
+                            <label for="leadMessage">Proje Detayları ve Talepleriniz</label>
+                        </div>
+
+                        <button type="submit" class="btn btn-massive submit-btn premium-submit" id="leadSubmitBtn">
+                            <span class="btn-text">Talebi Gönder <i class="fa-solid fa-arrow-right" style="margin-left: 8px;"></i></span>
+                            <div class="spinner-ring" style="display:none;" id="submitSpinner"></div>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Premium Success State -->
+                <div id="formSuccessMessage" class="success-overlay hidden">
+                    <div class="success-icon-wrap">
+                        <div class="success-icon-bg"></div>
+                        <i class="fa-solid fa-check"></i>
+                    </div>
+                    <h3 class="success-title">Talep Gönderildi!</h3>
+                    <p class="success-desc">Ekibimiz detayları inceleyip sizinle en kısa sürede iletişime geçecek. Birlikte harika işler çıkaracağız!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="light-footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <a href="index.html" class="logo">Alidea.</a>
+                <p style="margin-top: 1rem; color: #6B7280;">Premium Digital Agency & Spatial Solutions.</p>
+            </div>
+        </div>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>

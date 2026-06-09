@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Müşteri İzleme Paneli | Demo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0f1714;
+      --glass: rgba(255, 255, 255, 0.03);
+      --border: rgba(255, 255, 255, 0.06);
+      --text: #ffffff;
+      --text-muted: #889993;
+      --accent: #43e97b;
+      --accent-hover: #38d9a9;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .topbar {
+      height: 70px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      padding: 0 32px;
+      justify-content: space-between;
+      background: rgba(0,0,0,0.1);
+    }
+
+    .content {
+      flex: 1;
+      padding: 32px;
+      overflow-y: auto;
+      background: radial-gradient(circle at top right, rgba(67, 233, 123, 0.03), transparent 50%);
+    }
+
+    /* Dashboard Layout */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    @media (max-width: 900px) {
+      .dashboard-grid { grid-template-columns: 1fr; }
+    }
+
+    .stat-card {
+      background: var(--glass);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .stat-icon {
+      width: 60px; height: 60px;
+      border-radius: 16px;
+      background: rgba(67, 233, 123, 0.1);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px;
+      border: 1px solid rgba(67, 233, 123, 0.2);
+    }
+
+    .stat-info h4 {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    .stat-value {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--text);
+      transition: color 0.3s, transform 0.3s;
+    }
+
+    .stat-total {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    .widget-card {
+      background: var(--glass);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    .widget-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 24px;
+    }
+    .widget-header h3 { font-size: 16px; font-weight: 600; }
+    
+    /* Timeline */
+    .timeline {
+      position: relative;
+      padding-left: 20px;
+      border-left: 2px solid rgba(255,255,255,0.1);
+    }
+    .timeline-item {
+      position: relative;
+      margin-bottom: 24px;
+    }
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -27px; top: 0;
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: 2px solid var(--bg);
+      box-shadow: 0 0 8px rgba(67, 233, 123, 0.5);
+    }
+    .timeline-date {
+      font-size: 12px; color: var(--accent); font-weight: 600; margin-bottom: 6px;
+    }
+    .timeline-title {
+      font-size: 15px; font-weight: 600; color: #fff; margin-bottom: 4px;
+    }
+    .timeline-desc {
+      font-size: 13px; color: var(--text-muted); line-height: 1.5;
+    }
+
+    /* Calendar */
+    .calendars-wrapper {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 32px;
+    }
+    @media (max-width: 768px) {
+      .calendars-wrapper { grid-template-columns: 1fr; }
+    }
+    .month-header {
+      font-size: 14px; color: var(--text); margin-bottom: 12px; font-weight: 600; text-align: center;
+    }
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+      text-align: center;
+    }
+    .cal-day-name {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .cal-day {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 8px;
+      padding: 10px 0;
+      font-size: 14px;
+      color: rgba(255,255,255,0.6);
+      position: relative;
+    }
+    .cal-day.empty { background: transparent; border-color: transparent; }
+    .cal-day.has-post {
+      color: #fff;
+      font-weight: 700;
+      border-color: rgba(255,255,255,0.2);
+    }
+    
+    .cal-day.has-post.ig-post { border-color: rgba(225,48,108,0.4); }
+    .cal-day.has-post.tt-post { border-color: rgba(0,242,254,0.4); }
+    .cal-day.has-post.story-post { border-color: rgba(245,158,11,0.4); }
+
+    .dots-container {
+      position: absolute; bottom: 4px; left: 0; width: 100%;
+      display: flex; justify-content: center; gap: 3px; pointer-events: none;
+    }
+    .dots-container .dot {
+      width: 5px; height: 5px; border-radius: 50%;
+    }
+    .legend {
+      display: flex; gap: 16px; font-size: 12px; color: var(--text-muted);
+    }
+    .legend-item { display: flex; align-items: center; gap: 6px; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; }
+    
+    .dot.ig { background: #E1306C; box-shadow: 0 0 8px rgba(225,48,108,0.6); }
+    .dot.tt { background: #00f2fe; box-shadow: 0 0 8px rgba(0,242,254,0.6); }
+    .dot.story { background: #f59e0b; box-shadow: 0 0 8px rgba(245,158,11,0.6); }
+
+  </style>
+</head>
+<body>
+
+  <main class="main-content">
+    <header class="topbar">
+      <div>
+        <h2 style="margin-bottom: 4px;">Müşteri Paneli</h2>
+        <div style="color: var(--text-muted); font-size: 14px;">Salt Okunur İzleme Ekranı</div>
+      </div>
+      <button class="btn-sm" style="background: rgba(255, 255, 255, 0.1); color: #fff; border: none; padding: 8px 16px; border-radius:8px; cursor:pointer;" onclick="window.location.href='admin-login.html'">Çıkış Yap</button>
+    </header>
+
+    <div class="content">
+      
+      <!-- STATS -->
+      <div class="dashboard-grid">
+        <div class="stat-card">
+          <div class="stat-icon" style="background: rgba(255, 77, 109, 0.1); border-color: rgba(255, 77, 109, 0.2); color: #ff4d6d;">⌛</div>
+          <div class="stat-info">
+            <h4>Bekleyen Fatura Tutarı</h4>
+            <div class="stat-value" id="pendingBakiye" style="color: #ff4d6d;">0 <span class="stat-total" style="color:#ff4d6d;">₺</span></div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">🎬</div>
+          <div class="stat-info">
+            <h4>Gerçekleşen Çekim</h4>
+            <div class="stat-value" id="shootCountDisplay">0 <span class="stat-total">Adet</span></div>
+            <p style="font-size:12px; color:var(--text-muted); margin-top:8px;">(Adet: 1000 ₺)</p>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">✂️</div>
+          <div class="stat-info">
+            <h4>Editlenen Video</h4>
+            <div class="stat-value" id="editedCountDisplay">0</div>
+            <p style="font-size:12px; color:var(--text-muted); margin-top:8px;">(Adet: 700 ₺)</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- TIMELINE & CALENDARS -->
+      <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 24px;">
+        
+        <div class="widget-card" style="align-self: start;">
+          <div class="widget-header">
+            <h3>📍 Gerçekleşen Çekim Tarihleri</h3>
+          </div>
+          <div class="timeline" id="shootTimeline">
+            <!-- JavaScript ile doldurulacak -->
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 24px;">
+          <!-- CALENDAR IG -->
+          <div class="widget-card" style="border-color: rgba(225, 48, 108, 0.3); background: linear-gradient(135deg, rgba(225, 48, 108, 0.05), transparent); margin-bottom: 0;">
+            <div class="widget-header">
+              <h3 style="color: #E1306C;">📸 Instagram Paylaşım Takvimi</h3>
+              <div class="legend">
+                <span class="legend-item"><span class="dot ig"></span> Instagram'da Paylaşıldı</span>
+              </div>
+            </div>
+            <div class="calendars-wrapper" id="calendarGridIg">
+              <!-- JavaScript ile doldurulacak -->
+            </div>
+          </div>
+
+          <!-- CALENDAR TT -->
+          <div class="widget-card" style="border-color: rgba(0, 242, 254, 0.3); background: linear-gradient(135deg, rgba(0, 242, 254, 0.05), transparent); margin-bottom: 0;">
+            <div class="widget-header">
+              <h3 style="color: #00f2fe;">🎵 TikTok Paylaşım Takvimi</h3>
+              <div class="legend">
+                <span class="legend-item"><span class="dot tt"></span> TikTok'ta Paylaşıldı</span>
+              </div>
+            </div>
+            <div class="calendars-wrapper" id="calendarGridTt">
+              <!-- JavaScript ile doldurulacak -->
+            </div>
+          </div>
+
+          <!-- CALENDAR STORY -->
+          <div class="widget-card" style="border-color: rgba(245, 158, 11, 0.3); background: linear-gradient(135deg, rgba(245, 158, 11, 0.05), transparent); margin-bottom: 0;">
+            <div class="widget-header">
+              <h3 style="color: #f59e0b;">🔄 Story Paylaşım Takvimi</h3>
+              <div class="legend">
+                <span class="legend-item"><span class="dot story"></span> Story Paylaşıldı</span>
+              </div>
+            </div>
+            <div class="calendars-wrapper" id="calendarGridStory">
+              <!-- JavaScript ile doldurulacak -->
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      loadStats();
+      loadShoots();
+      loadAllCalendars();
+
+      // Diğer sekmede yapılan değişiklikleri "anlık olarak" dinlemek için storage eventi
+      window.addEventListener('storage', () => {
+        loadStats(true);
+        loadShoots();
+        loadAllCalendars();
+      });
+    });
+
+    function escapeHtml(unsafe) {
+      if(!unsafe) return '';
+      return unsafe
+           .replace(/&/g, "&amp;")
+           .replace(/</g, "&lt;")
+           .replace(/>/g, "&gt;")
+           .replace(/"/g, "&quot;")
+           .replace(/'/g, "&#039;");
+    }
+
+    function loadStats(animate = false) {
+      let editCount = parseInt(localStorage.getItem('muscent_edited_count')) || 0;
+      let shoots = JSON.parse(localStorage.getItem('muscent_shoots')) || [];
+      let shootCount = shoots.length;
+
+      let editTotal = editCount * 700;
+      let shootTotal = shootCount * 1000;
+      let totalPending = editTotal + shootTotal;
+
+      const editDisplay = document.getElementById('editedCountDisplay');
+      const shootDisplay = document.getElementById('shootCountDisplay');
+      const pendingDisplay = document.getElementById('pendingBakiye');
+
+      editDisplay.innerHTML = editCount;
+      shootDisplay.innerHTML = `${shootCount} <span class="stat-total">Adet</span>`;
+      pendingDisplay.innerHTML = `${totalPending.toLocaleString('tr-TR')} <span class="stat-total" style="color:#ff4d6d;">₺</span>`;
+
+      if (animate) {
+        [editDisplay, shootDisplay, pendingDisplay].forEach(el => {
+          el.style.transform = 'scale(1.1)';
+          setTimeout(() => el.style.transform = 'scale(1)', 200);
+        });
+      }
+    }
+
+    function loadShoots() {
+      const timeline = document.getElementById('shootTimeline');
+      let shoots = JSON.parse(localStorage.getItem('muscent_shoots')) || [];
+      
+      if (shoots.length === 0) {
+        timeline.innerHTML = '<div style="color:var(--text-muted); font-size:13px; font-style:italic;">Henüz çekim eklenmemiş.</div>';
+        return;
+      }
+      
+      let html = '';
+      [...shoots].reverse().forEach(shoot => {
+        html += `
+          <div class="timeline-item">
+            <div class="timeline-date">${escapeHtml(shoot.date)}</div>
+            <div class="timeline-title">${escapeHtml(shoot.title)}</div>
+            ${shoot.desc ? `<div class="timeline-desc">${escapeHtml(shoot.desc)}</div>` : ''}
+          </div>
+        `;
+      });
+      timeline.innerHTML = html;
+    }
+
+    function loadAllCalendars() {
+      renderCalendar('calendarGridIg', 'muscent_ig_days', 'ig');
+      renderCalendar('calendarGridTt', 'muscent_tt_days', 'tt');
+      renderCalendar('calendarGridStory', 'muscent_story_days', 'story');
+    }
+
+    function renderCalendar(gridId, storageKey, type) {
+      const calendarGrid = document.getElementById(gridId);
+      const sharedDays = JSON.parse(localStorage.getItem(storageKey)) || {};
+      
+      const dotClass = type === 'ig' ? 'ig' : (type === 'tt' ? 'tt' : 'story');
+      const postClass = type === 'ig' ? 'ig-post' : (type === 'tt' ? 'tt-post' : 'story-post');
+
+      // Ay 1: Haziran 2026 (1'i Çarşamba)
+      let m1_html = `<div class="calendar-month">
+        <div class="month-header">Haziran 2026</div>
+        <div class="calendar-grid">
+          <div class="cal-day-name">Pzt</div><div class="cal-day-name">Sal</div><div class="cal-day-name">Çar</div><div class="cal-day-name">Per</div><div class="cal-day-name">Cum</div><div class="cal-day-name">Cmt</div><div class="cal-day-name">Paz</div>
+          <div class="cal-day empty"></div><div class="cal-day empty"></div>`;
+      for(let i=1; i<=30; i++) {
+        let count = sharedDays[`m1_${i}`] || 0;
+        let className = "cal-day" + (count > 0 ? ` has-post ${postClass}` : "");
+        let titleText = count > 0 ? `${count} Paylaşım` : "";
+        let dotsHtml = count > 0 ? `<div class="dots-container">${`<div class="dot ${dotClass}"></div>`.repeat(count)}</div>` : '';
+        m1_html += `<div class="${className}" title="${titleText}">${i}${dotsHtml}</div>`;
+      }
+      m1_html += `</div></div>`;
+
+      // Ay 2: Temmuz 2026 (1'i Cuma)
+      let m2_html = `<div class="calendar-month">
+        <div class="month-header">Temmuz 2026</div>
+        <div class="calendar-grid">
+          <div class="cal-day-name">Pzt</div><div class="cal-day-name">Sal</div><div class="cal-day-name">Çar</div><div class="cal-day-name">Per</div><div class="cal-day-name">Cum</div><div class="cal-day-name">Cmt</div><div class="cal-day-name">Paz</div>
+          <div class="cal-day empty"></div><div class="cal-day empty"></div><div class="cal-day empty"></div><div class="cal-day empty"></div>`;
+      for(let i=1; i<=31; i++) {
+        let count = sharedDays[`m2_${i}`] || 0;
+        let className = "cal-day" + (count > 0 ? ` has-post ${postClass}` : "");
+        let titleText = count > 0 ? `${count} Paylaşım` : "";
+        let dotsHtml = count > 0 ? `<div class="dots-container">${`<div class="dot ${dotClass}"></div>`.repeat(count)}</div>` : '';
+        m2_html += `<div class="${className}" title="${titleText}">${i}${dotsHtml}</div>`;
+      }
+      m2_html += `</div></div>`;
+
+      calendarGrid.innerHTML = m1_html + m2_html;
+    }
+  </script>
+</body>
+</html>
