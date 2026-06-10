@@ -2112,3 +2112,22 @@ body.light-theme {
     }
     .arm-content h2, .giant-cta h2 { font-size: 1.8rem !important; }
 }
+@media (max-width: 768px) {
+    .metric-grid {
+        grid-template-columns: 1fr !important;
+        gap: 2.5rem !important;
+    }
+    .metric-item h3 {
+        font-size: 3.5rem !important;
+    }
+    .bento-grid {
+        grid-template-columns: 1fr !important;
+        grid-template-rows: auto !important;
+        gap: 1.5rem !important;
+    }
+    .bento-item.large {
+        grid-column: 1 !important;
+        grid-row: auto !important;
+        min-height: 350px !important;
+    }
+}
