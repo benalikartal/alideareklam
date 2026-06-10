@@ -150,3 +150,47 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+// Mobile Menu Logic
+document.addEventListener('DOMContentLoaded', () => {
+    const mobileBtn = document.getElementById('mobileMenuBtn');
+    const mobileOverlay = document.getElementById('mobileNavOverlay');
+    const mobileModalBtn = document.getElementById('mobileNavOpenModalBtn');
+    const mainModal = document.getElementById('leadModal');
+
+    if (mobileBtn && mobileOverlay) {
+        mobileBtn.addEventListener('click', () => {
+            mobileOverlay.classList.toggle('active');
+            // Change icon
+            if (mobileOverlay.classList.contains('active')) {
+                mobileBtn.innerHTML = '✕';
+                document.body.style.overflow = 'hidden';
+            } else {
+                mobileBtn.innerHTML = '☰';
+                document.body.style.overflow = '';
+            }
+        });
+        
+        // Close menu when a link is clicked
+        const links = mobileOverlay.querySelectorAll('a:not(#mobileNavOpenModalBtn)');
+        links.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileOverlay.classList.remove('active');
+                mobileBtn.innerHTML = '☰';
+                document.body.style.overflow = '';
+            });
+        });
+    }
+
+    if (mobileModalBtn && mainModal) {
+        mobileModalBtn.addEventListener('click', () => {
+            // close mobile menu
+            mobileOverlay.classList.remove('active');
+            mobileBtn.innerHTML = '☰';
+            
+            // open modal
+            mainModal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        });
+    }
+});
