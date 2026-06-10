@@ -1,119 +1,169 @@
 const fs = require('fs');
-const files = [
-  'special-customer-dashboard.html',
-  'special-customer-payments.html',
-  'messages-dashboard.html'
-];
 
-const cssBlock = `
-    /* MOBILE RESPONSIVE CSS */
+// ─── helper to inject proper mobile CSS into a file ─────────────────────────
+function addMobileCSS(file, extraCSS = '') {
+  let content = fs.readFileSync(file, 'utf8');
+
+  // Remove any previous injected block
+  content = content.replace(/\n\s*\/\* MOBILE RESPONSIVE CSS \*\/[\s\S]*?<\/style>/m, '\n  </style>');
+
+  // --- shared mobile block ---
+  const mobileBlock = `
+    /* ─── SIDEBAR BACKGROUND FIX ─── */
+    .sidebar {
+      background: #0f1714 !important;
+    }
+
+    /* ─── MOBILE RESPONSIVE ─────────────────────────── */
     .mobile-overlay {
       display: none;
       position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.5);
+      inset: 0;
+      background: rgba(0,0,0,0.65);
       z-index: 998;
-      backdrop-filter: blur(4px);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
     }
+    .mobile-overlay.active { display: block; }
+
     .hamburger {
       display: none;
-      background: none;
-      border: none;
-      color: var(--text);
-      font-size: 24px;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px;
+      color: #fff;
+      font-size: 18px;
+      width: 40px;
+      height: 40px;
       cursor: pointer;
-      margin-right: 16px;
+      flex-shrink: 0;
+      margin-right: 12px;
+      transition: background 0.2s;
     }
-    @media (max-width: 900px) {
+    .hamburger:hover { background: rgba(255,255,255,0.12); }
+
+    @media (max-width: 860px) {
       .sidebar {
-        position: fixed;
-        left: 0;
-        top: 0;
-        bottom: 0;
+        position: fixed !important;
+        left: 0; top: 0; bottom: 0;
         z-index: 999;
+        width: 260px !important;
         transform: translateX(-100%);
-        transition: transform 0.3s ease;
+        transition: transform 0.3s cubic-bezier(0.16,1,0.3,1);
+        box-shadow: 4px 0 32px rgba(0,0,0,0.6);
       }
-      .sidebar.open {
-        transform: translateX(0);
-      }
-      .mobile-overlay.active {
-        display: block;
-      }
-      .hamburger {
-        display: block;
-      }
-      .grid {
-        grid-template-columns: 1fr !important;
-      }
-      .stats-grid, .panels-grid, .content-grid, .overview-cards, .dashboard-grid {
-        grid-template-columns: 1fr !important;
-      }
+      .sidebar.open { transform: translateX(0) !important; }
+
+      .hamburger { display: flex !important; }
+
       .topbar {
-        padding: 0 16px;
+        padding: 0 16px !important;
       }
-      .content-area, .content {
-        padding: 16px;
+
+      .content, .content-area {
+        padding: 16px !important;
       }
-      .main-content {
-        width: 100%;
-        max-width: 100vw;
+
+      .dashboard-grid,
+      .stat-row {
+        grid-template-columns: 1fr !important;
       }
-      /* Chat layout specific for messages */
+
+      .timeline-widget,
+      .calendar-widget {
+        grid-column: span 1 !important;
+      }
+
+      .calendars-wrapper {
+        grid-template-columns: 1fr !important;
+        gap: 16px !important;
+      }
+
+      table {
+        font-size: 13px;
+      }
+
+      table th:nth-child(2),
+      table td:nth-child(2) {
+        max-width: 120px;
+        white-space: normal;
+        word-break: break-word;
+      }
+
+      .widget-header {
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .stat-card {
+        padding: 16px !important;
+        gap: 14px !important;
+      }
+
+      .stat-icon {
+        width: 48px !important;
+        height: 48px !important;
+        font-size: 22px !important;
+        flex-shrink: 0;
+      }
+
+      .stat-value { font-size: 24px !important; }
+
+      /* messages chat panel stacking */
       .chat-layout {
         grid-template-columns: 1fr !important;
+        grid-template-rows: 280px 1fr;
       }
-      .chat-list {
-        display: block; /* Could hide one or the other, but stacking is safer for now */
+
+      .topbar h2 {
+        font-size: 15px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
     }
-  </style>
-`;
+${extraCSS}
+  </style>`;
 
-const jsBlock = `
+  content = content.replace(/(\s*)<\/style>/, mobileBlock);
+
+  // --- add overlay div right after <body> ---
+  if (!content.includes('id="mobileOverlay"')) {
+    content = content.replace(/<body>/, '<body>\n  <div class="mobile-overlay" id="mobileOverlay" onclick="closeSidebar()"></div>');
+  }
+
+  // --- add hamburger to topbar header (after opening tag only) ---
+  if (!content.includes('class="hamburger"')) {
+    content = content.replace(
+      /(<(?:header|div) class="topbar">)/,
+      '$1\n      <button class="hamburger" onclick="openSidebar()">&#9776;</button>'
+    );
+  }
+
+  // --- add JS functions if not present ---
+  if (!content.includes('function openSidebar()')) {
+    const jsFunctions = `
     function openSidebar() {
-      const sb = document.querySelector('.sidebar');
-      const mo = document.getElementById('mobileOverlay');
-      if (sb) sb.classList.add('open');
-      if (mo) mo.classList.add('active');
+      document.querySelector('.sidebar').classList.add('open');
+      document.getElementById('mobileOverlay').classList.add('active');
+      document.body.style.overflow = 'hidden';
     }
     function closeSidebar() {
-      const sb = document.querySelector('.sidebar');
-      const mo = document.getElementById('mobileOverlay');
-      if (sb) sb.classList.remove('open');
-      if (mo) mo.classList.remove('active');
+      document.querySelector('.sidebar').classList.remove('open');
+      document.getElementById('mobileOverlay').classList.remove('active');
+      document.body.style.overflow = '';
     }
-  </script>
 `;
-
-files.forEach(file => {
-  if (!fs.existsSync(file)) {
-    console.log(file + ' not found');
-    return;
+    const lastScript = content.lastIndexOf('</script>');
+    content = content.slice(0, lastScript) + jsFunctions + content.slice(lastScript);
   }
-  let content = fs.readFileSync(file, 'utf8');
 
-  if (!content.includes('.mobile-overlay')) {
-    content = content.replace('</style>', cssBlock);
-    content = content.replace('<body>', '<body>\n  <div class="mobile-overlay" id="mobileOverlay" onclick="closeSidebar()"></div>');
-    
-    // For topbars:
-    const hamburgerBtn = '\n        <button class="hamburger" onclick="openSidebar()">☰</button>';
-    content = content.replace(/<div class="topbar">/g, '<div class="topbar">' + hamburgerBtn);
-    content = content.replace(/<header class="topbar">/g, '<header class="topbar">' + hamburgerBtn);
-    
-    // For JS
-    // Ensure we don't accidentally replace all script tags, just the last one or append to body end.
-    const lastScriptIndex = content.lastIndexOf('</script>');
-    if (lastScriptIndex !== -1) {
-      content = content.substring(0, lastScriptIndex) + jsBlock + content.substring(lastScriptIndex + 9);
-    } else {
-      content = content.replace('</body>', jsBlock + '\n</body>');
-    }
-    
-    fs.writeFileSync(file, content, 'utf8');
-    console.log('Updated: ' + file);
-  } else {
-    console.log('Already updated: ' + file);
-  }
-});
+  fs.writeFileSync(file, content, 'utf8');
+  console.log('✅ Updated:', file);
+}
+
+addMobileCSS('special-customer-dashboard.html');
+addMobileCSS('special-customer-payments.html');
+addMobileCSS('messages-dashboard.html');
