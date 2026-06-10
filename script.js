@@ -110,9 +110,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 };
 
                 // Save to localStorage
-                let existingLeads = JSON.parse(localStorage.getItem('alidea_leads')) || [];
-                existingLeads.push(lead);
-                localStorage.setItem('alidea_leads', JSON.stringify(existingLeads));
+                try {
+                    let existingLeads = JSON.parse(localStorage.getItem('alidea_leads')) || [];
+                    existingLeads.push(lead);
+                    localStorage.setItem('alidea_leads', JSON.stringify(existingLeads));
+                } catch (e) {
+                    console.warn("Storage restricted (probably running via file://). Form submitted in-memory only.");
+                }
 
                 // Show success overlay
                 const formWrap = document.getElementById('formContentWrap');
