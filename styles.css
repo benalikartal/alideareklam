@@ -2224,3 +2224,23 @@ body.light-theme {
 }
 
 .mobile-nav-links a.btn { color: #fff !important; }
+@media (max-width: 768px) {
+    .bento-container {
+        grid-template-columns: 1fr !important;
+        padding: 0 1rem !important;
+        gap: 1.5rem !important;
+    }
+    .bento-container .bento-card {
+        grid-column: span 1 !important;
+        padding: 2rem 1.5rem !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 1.5rem !important;
+    }
+    .bento-container .bento-card > div {
+        max-width: 100% !important;
+    }
+    .bento-content {
+        padding: 0 !important;
+    }
+}
