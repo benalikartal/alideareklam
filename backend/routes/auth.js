@@ -20,55 +20,60 @@ const loginLimiter = rateLimit({
 });
 
 // ─── POST /api/auth/login ─────────────────────────────────────────────────────
-router.post('/login', loginLimiter, (req, res) => {
+router.post('/login', loginLimiter, async (req, res) => {
   const { username, password } = req.body || {};
 
   if (!username || !password) {
     return res.status(400).json({ error: 'Kullanıcı adı ve şifre gerekli.' });
   }
 
-  // Kullanıcıyı bul
-  const user = db.prepare('SELECT * FROM users WHERE username = ?').get(username.trim());
+  try {
+    // Kullanıcıyı bul
+    const user = await db.get('SELECT * FROM users WHERE username = $1', [username.trim()]);
 
-  if (!user) {
-    // Timing attack'ı önlemek için yine de hash karşılaştır
-    bcrypt.compareSync('dummy', '$2a$12$dummyhashfordummypurposes123456789012345678');
-    return res.status(401).json({ error: 'Kullanıcı adı veya şifre hatalı.' });
+    if (!user) {
+      // Timing attack'ı önlemek için yine de hash karşılaştır
+      bcrypt.compareSync('dummy', '$2a$12$dummyhashfordummypurposes123456789012345678');
+      return res.status(401).json({ error: 'Kullanıcı adı veya şifre hatalı.' });
+    }
+
+    const passwordOk = bcrypt.compareSync(password, user.password_hash);
+
+    if (!passwordOk) {
+      return res.status(401).json({ error: 'Kullanıcı adı veya şifre hatalı.' });
+    }
+
+    // JWT token oluştur (1 gün geçerli)
+    const token = jwt.sign(
+      { id: user.id, username: user.username, role: user.role, customerId: user.customer_id },
+      process.env.JWT_SECRET,
+      { expiresIn: '1d' }
+    );
+
+    // HTTP-only cookie olarak gönder (JS okuyamaz)
+    res.cookie('token', token, {
+      httpOnly: true,
+      sameSite: 'lax',
+      maxAge: 24 * 60 * 60 * 1000, // 1 gün
+      // secure: true — Deploy'da HTTPS zorunlu olduğunda açın
+    });
+
+    // Yönlendirme URL'ini role göre belirle
+    let redirectUrl = '/admin-dashboard.html';
+    if (user.role === 'customer') {
+      redirectUrl = '/special-customer-dashboard.html';
+    }
+
+    return res.json({
+      success: true,
+      role: user.role,
+      username: user.username,
+      redirect: redirectUrl,
+    });
+  } catch (err) {
+    console.error('Login error:', err);
+    return res.status(500).json({ error: 'Sunucu hatası.' });
   }
-
-  const passwordOk = bcrypt.compareSync(password, user.password_hash);
-
-  if (!passwordOk) {
-    return res.status(401).json({ error: 'Kullanıcı adı veya şifre hatalı.' });
-  }
-
-  // JWT token oluştur (1 gün geçerli)
-  const token = jwt.sign(
-    { id: user.id, username: user.username, role: user.role, customerId: user.customer_id },
-    process.env.JWT_SECRET,
-    { expiresIn: '1d' }
-  );
-
-  // HTTP-only cookie olarak gönder (JS okuyamaz)
-  res.cookie('token', token, {
-    httpOnly: true,
-    sameSite: 'lax',
-    maxAge: 24 * 60 * 60 * 1000, // 1 gün
-    // secure: true — Deploy'da HTTPS zorunlu olduğunda açın
-  });
-
-  // Yönlendirme URL'ini role göre belirle
-  let redirectUrl = '/admin-dashboard.html';
-  if (user.role === 'customer') {
-    redirectUrl = '/special-customer-dashboard.html';
-  }
-
-  return res.json({
-    success: true,
-    role: user.role,
-    username: user.username,
-    redirect: redirectUrl,
-  });
 });
 
 // ─── POST /api/auth/logout ────────────────────────────────────────────────────
