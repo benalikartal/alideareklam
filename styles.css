@@ -125,6 +125,8 @@ p {
     z-index: 1000;
     display: flex;
     align-items: center;
+    will-change: backdrop-filter;
+    transform: translateZ(0);
 }
 
 .nav-container {
@@ -348,8 +350,8 @@ section {
 
 .product-glass-panel {
     background: var(--glass-bg);
-    backdrop-filter: blur(40px);
-    -webkit-backdrop-filter: blur(40px);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border: 1px solid var(--glass-border);
     border-radius: var(--radius-xl);
     padding: 4rem;
@@ -358,6 +360,7 @@ section {
     gap: 4rem;
     align-items: center;
     box-shadow: var(--shadow-lg);
+    transform: translateZ(0);
 }
 
 .product-logo {
@@ -589,6 +592,9 @@ section {
     display: inline-flex;
     white-space: nowrap;
     animation: ticker 25s linear infinite;
+    will-change: transform;
+    transform: translateZ(0);
+    backface-visibility: hidden;
 }
 .ticker-item {
     font-size: 1.125rem;
@@ -1004,6 +1010,8 @@ body.dark-theme {
     border-radius: 24px;
     overflow: hidden;
     transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease;
+    will-change: transform, border-color;
+    transform: translateZ(0);
 }
 .glass-panel:hover {
     transform: translateY(-8px);
@@ -1199,6 +1207,7 @@ body.dark-theme {
     align-items: center;
     justify-content: center;
     overflow: hidden;
+    transform: translateZ(0);
 }
 
 .canvas-grid {
