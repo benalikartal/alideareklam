@@ -2131,3 +2131,24 @@ body.light-theme {
         min-height: 350px !important;
     }
 }
+@media (max-width: 768px) {
+    .creative-arm, .tech-container {
+        grid-template-columns: 1fr !important;
+        gap: 3rem !important;
+    }
+    .code-block {
+        padding: 1.5rem !important;
+        font-size: 0.9rem !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        overflow-x: auto !important;
+    }
+    .arm-content {
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+    .tech-graphic {
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+}
