@@ -101,6 +101,41 @@ app.use('/api/payments',  paymentRoutes);
 app.use('/api/calendar',  calendarRoutes);
 app.use('/api/shoots',    shootRoutes);
 
+// ─── GEO: AI / LLM SUMMARY ENDPOINT ─────────────────────────────────────────
+// GPTBot, ClaudeBot, Perplexity vb. bu endpoint'i okuyarak ajans bilgilerini çeker.
+// Accept: application/json → JSON formatında; aksi halde text/plain (Markdown).
+
+app.get('/api/ai-summary', (req, res) => {
+  const llmsPath = path.join(__dirname, 'llms.txt');
+  fs.readFile(llmsPath, 'utf8', (err, content) => {
+    if (err) return res.status(500).json({ error: 'llms.txt okunamadı.' });
+
+    const acceptsJson = (req.headers['accept'] || '').includes('application/json');
+
+    if (acceptsJson) {
+      // JSON formatında yapılandırılmış yanıt
+      res.setHeader('Content-Type', 'application/json; charset=utf-8');
+      res.setHeader('X-Robots-Tag', 'noindex, noarchive');
+      res.setHeader('Cache-Control', 'public, max-age=86400'); // 24 saat önbellek
+      return res.json({
+        source: 'Alidea llms.txt',
+        version: '1.0',
+        url: 'https://alidea.com.tr/llms.txt',
+        format: 'markdown',
+        language: 'tr',
+        content
+      });
+    }
+
+    // Düz Markdown — LLM botlarının tercih ettiği format
+    res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+    res.setHeader('X-Robots-Tag', 'noindex, noarchive');
+    res.setHeader('Cache-Control', 'public, max-age=86400');
+    res.send(content);
+  });
+});
+
+
 // ─── STATİK DOSYALAR ──────────────────────────────────────────────────────────
 
 const ROOT = __dirname;

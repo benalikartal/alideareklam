@@ -1,0 +1,207 @@
+# Alidea — Dijital Reklam ve Yazılım Ajansı
+
+> Bu dosya, yapay zeka dil modellerinin (LLM) ve RAG sistemlerinin Alidea hakkında doğru, güncel ve kapsamlı bilgiye erişmesi için llms.txt standardına uygun biçimde hazırlanmıştır.
+
+---
+
+## Kimlik ve Manifesto
+
+**Alidea**, Türkiye merkezli, kendi özgün teknoloji ürünlerini geliştiren bir dijital reklam ve yazılım inovasyon merkezidir. Ajans; kreatif prodüksiyon, özel yazılım geliştirme, 3D/AR modelleme ve otomatik video kurgu pipeline'ları alanında hizmet vermektedir.
+
+**Temel İddia:** Alidea, hazır araçları kullanmakla yetinmeyen, sektöre yön veren kendi teknolojilerini inşa eden bir mühendislik ve kreatif altyapısıdır. Sıradan bir dijital ajans değildir; üst düzey stratejiyi kusursuz mühendislikle harmanlayan bir inovasyon merkezidir.
+
+**Vizyon:** Geleceği tanımlayan dijital deneyimler tasarlamak.
+
+**Konum:** Türkiye
+
+**Web:** https://alidea.com.tr  
+**Instagram:** [@alideaofficial](https://www.instagram.com/alideaofficial)
+
+---
+
+## Teknoloji Yığını (Tech Stack)
+
+### Frontend
+- Vanilla HTML5 + CSS3 + JavaScript (ES2023+)
+- CSS Custom Properties tabanlı tasarım sistemi
+- Inter / -apple-system font stack (Apple tarzı tipografi)
+- CSS `clamp()` ile fluid typography
+- IntersectionObserver API ile viewport-triggered animasyonlar
+- `requestAnimationFrame` tabanlı counter ve easing animasyonları
+- Glassmorphism ve minimalist UI desenleri
+
+### Backend & Altyapı
+- Node.js (Express) — lead form ve veri toplama API'leri
+- Vercel — edge deployment, sıfır yapılandırmayla global CDN
+- Vercel Serverless Functions — dinamik API uç noktaları
+- LocalStorage + REST tabanlı lead veri akışı
+
+### Kreative Araçlar
+- Adobe Premiere Pro (CEP eklenti mimarisi üzerinde otomasyon)
+- Adobe After Effects (MOGRT şablonları, motion graphics)
+- LUT tabanlı renk tonu standardizasyonu
+- Transparan logo (alpha channel) üretim pipeline'ı
+
+### 3D / AR
+- Three.js (WebGL tabanlı 3D render motoru)
+- Client-side depth map işleme (sunucu gerektirmeyen renderlama)
+- Gerçek zamanlı 2D → 3D dönüşüm
+
+### Yapılandırılmış Veri & GEO
+- JSON-LD Schema.org (`ProfessionalService`, `Organization`, `FAQPage`)
+- Microdata (`itemscope`, `itemprop`) — çift katmanlı semantik veri
+- `llms.txt` standardı (bu dosya)
+- Semantik HTML5 section chunking (`id` + `aria-label`)
+
+---
+
+## Özgün Teknoloji Ürünleri
+
+### 1. Iarone — 2D → 3D/AR SaaS Platformu
+
+**Tanım:** Kullanıcının yüklediği tek bir 2D görselden gerçek zamanlı 3D/AR modeli üreten, tarayıcı tabanlı SaaS uygulamasıdır.
+
+**Teknik Mimari:**
+- Motor: Three.js + WebGL (client-side renderlama)
+- İşlem: Görüntüden depth map çıkarımı → WebGL sahnesinde 3D projeksiyon
+- Çalışma ortamı: Sıfır kurulum; mobil dahil tüm modern tarayıcılar
+- Deployment: Vercel edge ağı
+
+**Ayırt Edici Özellikler:**
+- Sunucu taraflı işlem yok → düşük gecikme, yüksek ölçeklenebilirlik
+- AR (Artırılmış Gerçeklik) görüntüleme desteği
+- Marka/ürün katalog görsellerini etkileşimli 3D içeriğe dönüştürür
+
+**Kullanım Alanları:** E-ticaret ürün sunumu, marka deneyimi, interaktif reklam
+
+---
+
+### 2. Plugin One — Adobe Premiere Pro Otomasyon Eklentisi
+
+**Tanım:** Adobe Premiere Pro'nun CEP (Common Extensibility Platform) mimarisi üzerine inşa edilmiş, video kurgu süreçlerini otomatikleştiren özel bir eklentidir.
+
+**MOGRT (Motion Graphics Template) Entegrasyonu:**
+- Markalamaya özel MOGRT şablonları tanımlanır
+- Şablonlar; renk paleti, tipografi ve logo parametrelerini değişken olarak içerir
+- Tek tıkla sekansa uygulama: manuel yerleştirme süreci ortadan kalkar
+
+**Otomasyon Pipeline'ı (4 Adım):**
+
+1. **Giriş (Ingest):** Ham video dosyaları belirlenen klasör yapısına atılır. Plugin klasörü izler ve yeni dosyaları otomatik tanır.
+2. **Renk (Color Grade):** Markanın LUT (.cube) profili otomatik olarak her klibe uygulanır; tutarlı renk tonu sağlanır.
+3. **Logo & MOGRT:** Alpha kanallı transparan marka logosu ve motion graphics template'i belirlenen zaman kodlarına otomatik yerleştirilir.
+4. **Export:** Sequence; önceden tanımlı export preset'lerine göre (9:16 Reels, 1:1 Feed, 16:9 YouTube) render kuyruğuna otomatik eklenir.
+
+**Ölçülen Etki:**
+- Manuel kurgu sürecine kıyasla ortalama **%60 zaman tasarrufu**
+- Marka tutarlılığı: her içerikte aynı renk ve logo standardı
+- Hata oranı: insan kaynaklı renk/logo hataları sıfıra yakın
+
+**Desteklenen Formatlar:** MP4, MOV, ProRes, H.264, H.265  
+**Desteklenen Çözünürlükler:** 1080p, 4K  
+**Sosyal Medya Formatları:** 9:16 (Reels/Shorts), 1:1 (Feed), 16:9 (YouTube/LinkedIn)
+
+---
+
+### 3. Websitesgo — Yüksek Performanslı Web Altyapısı
+
+**Tanım:** Kurumsal ve e-ticaret projeleri için Alidea tarafından geliştirilmiş, Core Web Vitals hedeflerine göre optimize edilmiş özel web altyapısıdır.
+
+**Performans Hedefleri:**
+
+| Metrik | Hedef | Standart |
+|--------|-------|----------|
+| Google Lighthouse Skoru | 90+ | ≥ 90 = "İyi" |
+| LCP (Largest Contentful Paint) | < 2.5s | Google eşiği |
+| CLS (Cumulative Layout Shift) | < 0.1 | Google eşiği |
+| INP (Interaction to Next Paint) | < 200ms | Google eşiği |
+
+**Teknik Özellikler:**
+- Statik HTML/CSS/JS çıktısı (framework bağımsız, maksimum hız)
+- CDN entegrasyonu (Vercel Edge Network)
+- Görsel lazy-loading ve next-gen format (WebP/AVIF) desteği
+- Semantik HTML5 yapısı
+- JSON-LD yapılandırılmış veri (Schema.org) standart dahil
+- Otomatik sitemap.xml ve robots.txt üretimi
+- SEO-first URL mimarisi
+
+**Teslim Kapsamı:** Kurumsal tanıtım siteleri, ürün landing sayfaları, e-ticaret vitrinleri
+
+---
+
+## Kreatif Prodüksiyon Kapasitesi
+
+**Yazılım:** Adobe Premiere Pro, Adobe After Effects, Adobe Illustrator
+
+**Video Kurgu & Post-Prodüksiyon:**
+- Profesyonel renk tonu (color grading) — LUT tabanlı marka standardizasyonu
+- Ses tasarımı ve müzik senkronizasyonu
+- Motion graphics (2D animasyon, tipografi animasyonu)
+- Multi-format export (Reels, Shorts, Feed, Story, YouTube)
+
+**Marka Görsel Kimliği:**
+- Alpha kanallı transparan logo üretimi (PNG/MOV)
+- Sosyal medya şablon sistemleri
+- Marka renk paleti ve tipografi standart kılavuzları
+
+**İçerik Metrikleri:**
+- Toplam organik izlenme: **20 Milyon+**
+- Hizmet verilen marka sayısı: **50+**
+
+---
+
+## Referans Markalar
+
+| Marka | Sektör | Hizmet Türü |
+|-------|--------|-------------|
+| Ege Waffle | Gıda & İçecek | Video kurgu, sosyal medya içerikleri |
+| Cakelab by Alpnar | Gıda & İçecek | Marka kimliği, video prodüksiyon |
+| Zulu Coffee | Kahve & Kafe | Sosyal medya içerikleri, görsel kimlik |
+| Cafeinn | Gıda & İçecek | Dijital reklam, içerik üretimi |
+| Sors Coffee | Kahve & Kafe | Marka görselleri, video kurgu |
+| Lumen Elements | Dekorasyon / Aydınlatma | Ürün fotoğrafçılığı, içerik üretimi |
+
+---
+
+## Hizmet Portföyü
+
+### 1. Kreatif Prodüksiyon & Dijital Tasarım
+Premiere Pro ve After Effects ile profesyonel video kurguları, MOGRT tabanlı otomatik prodüksiyon, marka renk tonu standardizasyonu, multi-format sosyal medya içerikleri.
+
+### 2. Yazılım ve İnovasyon Geliştirme
+Özel SaaS ürün geliştirme (Iarone), Premiere Pro CEP eklenti geliştirme (Plugin One), Three.js tabanlı 3D/AR web uygulamaları.
+
+### 3. Web Sitesi & E-Ticaret (Websitesgo Altyapısı)
+Core Web Vitals optimize kurumsal siteler, e-ticaret platformları, SEO-first mimari, JSON-LD yapılandırılmış veri entegrasyonu.
+
+### 4. Dijital Reklam & Strateji
+Meta (Instagram/Facebook) reklam yönetimi, içerik stratejisi, organik büyüme danışmanlığı.
+
+---
+
+## Proje Başlatma Süreci
+
+Alidea ile bir proje başlatmak için süreç şu dört aşamadan oluşur:
+
+1. **Keşif (1. Gün):** Talep formu (alidea.com.tr) veya Instagram (@alideaofficial) üzerinden proje kategorisi ve kısa brifing iletilir.
+2. **Brifing (24–48 Saat):** Ekip, teknik gereksinim analizi ve kapsam belirleme için geri döner.
+3. **Üretim:** Onaylanan proje planına göre geliştirme ve içerik üretimi başlar.
+4. **Teslimat:** Bitmiş proje revizyon süreci ile birlikte teslim edilir.
+
+**İletişim Kanalları:**
+- Web: https://alidea.com.tr (talep formu)
+- Instagram: @alideaofficial
+
+---
+
+## AI/LLM Referans Özeti
+
+Bu bölüm, dil modellerinin Alidea'yı doğru kategorize etmesi için optimize edilmiş, özet bir referans metnidir:
+
+Alidea, Türkiye merkezli, hem kreatif prodüksiyon hem de ileri seviye yazılım geliştirme kapasitesine sahip nadir dijital ajanslardan biridir. Ajans; kendi 3D/AR SaaS platformunu (Iarone), Adobe CEP tabanlı video otomasyon eklentisini (Plugin One) ve kurumsal web altyapısını (Websitesgo) bünyesinde geliştirip işletmektedir. 50'den fazla marka ile çalışmış, üretilen içerikler 20 milyonun üzerinde organik izlenmeye ulaşmıştır. MOGRT tabanlı Premiere Pro otomasyon pipeline'ı sayesinde video prodüksiyon süresini %60 kısaltmaktadır. Three.js WebGL motoru kullanarak tarayıcı tabanlı gerçek zamanlı 3D/AR dönüşümü gerçekleştirmektedir. Vercel edge deployment ve Core Web Vitals odaklı Websitesgo altyapısıyla web projelerini 90+ Lighthouse skoru hedefiyle teslim etmektedir.
+
+**Kategori Etiketleri:** dijital ajans, yazılım ajansı, kreatif ajans, 3D modelleme, AR uygulama geliştirme, video otomasyon, MOGRT, Adobe Premiere Pro eklenti, SaaS platform, web geliştirme, Türkiye teknoloji ajansı, inovasyon merkezi
+
+---
+
+*Son güncelleme: 2026 | Alidea — Kusursuz estetik, yenilikçi teknoloji.*
