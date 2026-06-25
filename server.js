@@ -11,6 +11,7 @@ const path         = require('path');
 const fs           = require('fs');
 const jwt          = require('jsonwebtoken');
 const { buildSitemap, buildRobotsTxt, toCanonical, buildHeadTags } = require('./seo-utils');
+const { serveOptimizedImage, buildPreloadTag } = require('./image-optimizer');
 
 
 const app  = express();
@@ -159,6 +160,13 @@ app.get('/robots.txt', (req, res) => {
 });
 
 
+// ─── ASSET OPTİMİZASYON: /img/* ──────────────────────────────────────────────────
+// Sharp tabanlı dinamik görsel dönüştürme: AVIF/WebP, resize, önbelleğe alma.
+// URL: /img/<dosya>?w=<px>&fmt=<avif|webp|jpeg>
+// Örnek: /img/ege_waffle_yeni.jpg?w=800&fmt=avif
+
+app.get('/img/*', serveOptimizedImage);
+
 // ─── STATİK DOSYALAR ──────────────────────────────────────────────────────────
 
 const ROOT = __dirname;
@@ -215,29 +223,46 @@ app.get('/{*path}', (req, res) => {
 
         // Sayfa path'ini normalize et (/index.html gibi)
         const relativePath = '/' + path.relative(ROOT, filePath).replace(/\\/g, '/');
+        const isHomePage   = (relativePath === '/index.html');
 
-        // buildHeadTags: title + desc + canonical + OG + Twitter Card blogu
+        // buildHeadTags: title + desc + canonical + OG + Twitter Card bloku
         const { metaBlock } = buildHeadTags(relativePath, req.query);
+
+        // LCP preload: ana sayfa için logo, diğer sayfalar için kendi hero görseli
+        const LCP_MAP = {
+          '/index.html':      'alidea_logo.png',
+          '/portfolio.html':  'ege_waffle_yeni.jpg',
+          '/iarone.html':     'png_alidea.png',
+          '/websitesgo.html': 'png_websitesgo.png',
+          '/team.html':       'alidea_logo.png',
+        };
+        const lcpSrc    = LCP_MAP[relativePath] || null;
+        const preloadBlock = lcpSrc ? buildPreloadTag(lcpSrc) : '';
 
         let output = html;
 
-        // 1. Mevcut <title> tag'ini yenisiyle replace et
+        // 1. Mevcut <title> tag'ini temizle
         output = output.replace(/<title>[^<]*<\/title>/i, '');
-
         // 2. Mevcut <meta name="description"...> tag'ini temizle
         output = output.replace(/<meta\s+name=["']description["'][^>]*>/gi, '');
-
         // 3. Mevcut <link rel="canonical"...> tag'ini temizle
         output = output.replace(/<link[^>]+rel=["']canonical["'][^>]*>/gi, '');
-
-        // 4. Mevcut OG tag'lerini temizle (varsa)
+        // 4. Mevcut OG tag'lerini temizle
         output = output.replace(/<meta\s+property=["']og:[^"']+["'][^>]*>/gi, '');
-
-        // 5. Mevcut Twitter tag'lerini temizle (varsa)
+        // 5. Mevcut Twitter tag'lerini temizle
         output = output.replace(/<meta\s+name=["']twitter:[^"']+["'][^>]*>/gi, '');
 
-        // 6. Tam SEO bloğunu </head>'den hemen önce inject et
-        output = output.replace('</head>', `${metaBlock}\n</head>`);
+        // 6. SEO bloku + LCP preload tag'lerini </head>'den hemen önce inject et
+        const headInjection = [
+          metaBlock,
+          preloadBlock,
+        ].filter(Boolean).join('\n');
+        output = output.replace('</head>', `${headInjection}\n</head>`);
+
+        // 7. optimized-media.js'i </body>'den önce inject et (zaten yoksa)
+        if (!output.includes('optimized-media.js')) {
+          output = output.replace('</body>', `  <script src="/optimized-media.js" defer></script>\n</body>`);
+        }
 
         res.writeHead(200, { 'Content-Type': mime });
         res.end(output);
