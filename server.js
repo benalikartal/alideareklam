@@ -10,6 +10,8 @@ const cors         = require('cors');
 const path         = require('path');
 const fs           = require('fs');
 const jwt          = require('jsonwebtoken');
+const { buildSitemap, buildRobotsTxt, toCanonical } = require('./seo-utils');
+
 
 const app  = express();
 const PORT = process.env.PORT || 3005;
@@ -136,6 +138,27 @@ app.get('/api/ai-summary', (req, res) => {
 });
 
 
+// ─── SEO: DİNAMİK SİTEMAP.XML ────────────────────────────────────────────────
+// Google, Bing ve yapay zeka tarayıcıları bu endpoint'i tüm URL envanteri için okur.
+
+app.get('/sitemap.xml', (req, res) => {
+  const xml = buildSitemap();
+  res.setHeader('Content-Type', 'application/xml; charset=utf-8');
+  res.setHeader('Cache-Control', 'public, max-age=3600'); // 1 saatte bir tazele
+  res.send(xml);
+});
+
+// ─── SEO: DİNAMİK ROBOTS.TXT ─────────────────────────────────────────────────
+// Hangi botun neyi tarayabileceğini ve llms.txt erişim iznini tanımlar.
+
+app.get('/robots.txt', (req, res) => {
+  const txt = buildRobotsTxt();
+  res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+  res.setHeader('Cache-Control', 'public, max-age=86400'); // 24 saat
+  res.send(txt);
+});
+
+
 // ─── STATİK DOSYALAR ──────────────────────────────────────────────────────────
 
 const ROOT = __dirname;
@@ -184,6 +207,33 @@ app.get('/{*path}', (req, res) => {
 
     const ext  = path.extname(filePath).toLowerCase();
     const mime = MIME[ext] || 'application/octet-stream';
+
+    // ── HTML dosyaları: canonical tag otomatik inject ──────────────────────────
+    if (ext === '.html') {
+      fs.readFile(filePath, 'utf8', (err, html) => {
+        if (err) return res.status(500).end('Internal Server Error');
+
+        // Canonical URL hesapla (path traversal güvenli)
+        const relativePath = '/' + path.relative(ROOT, filePath).replace(/\\/g, '/');
+        const canonicalUrl  = toCanonical(relativePath);
+        const canonicalTag  = `<link rel="canonical" href="${canonicalUrl}" />`;
+
+        // Eğer zaten canonical varsa, replace et; yoksa </head>'den önce inject et
+        let output;
+        if (/<link[^>]+rel=["']canonical["'][^>]*>/i.test(html)) {
+          output = html.replace(
+            /<link[^>]+rel=["']canonical["'][^>]*>/i,
+            canonicalTag
+          );
+        } else {
+          output = html.replace('</head>', `  ${canonicalTag}\n</head>`);
+        }
+
+        res.writeHead(200, { 'Content-Type': mime });
+        res.end(output);
+      });
+      return;
+    }
 
     // Video/PDF için range desteği
     if (ext === '.mp4' || ext === '.pdf') {
