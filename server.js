@@ -10,7 +10,7 @@ const cors         = require('cors');
 const path         = require('path');
 const fs           = require('fs');
 const jwt          = require('jsonwebtoken');
-const { buildSitemap, buildRobotsTxt, toCanonical } = require('./seo-utils');
+const { buildSitemap, buildRobotsTxt, toCanonical, buildHeadTags } = require('./seo-utils');
 
 
 const app  = express();
@@ -208,26 +208,36 @@ app.get('/{*path}', (req, res) => {
     const ext  = path.extname(filePath).toLowerCase();
     const mime = MIME[ext] || 'application/octet-stream';
 
-    // ── HTML dosyaları: canonical tag otomatik inject ──────────────────────────
+    // ── HTML dosyaları: tam SEO + OG + Twitter head tag inject ─────────────────
     if (ext === '.html') {
       fs.readFile(filePath, 'utf8', (err, html) => {
         if (err) return res.status(500).end('Internal Server Error');
 
-        // Canonical URL hesapla (path traversal güvenli)
+        // Sayfa path'ini normalize et (/index.html gibi)
         const relativePath = '/' + path.relative(ROOT, filePath).replace(/\\/g, '/');
-        const canonicalUrl  = toCanonical(relativePath);
-        const canonicalTag  = `<link rel="canonical" href="${canonicalUrl}" />`;
 
-        // Eğer zaten canonical varsa, replace et; yoksa </head>'den önce inject et
-        let output;
-        if (/<link[^>]+rel=["']canonical["'][^>]*>/i.test(html)) {
-          output = html.replace(
-            /<link[^>]+rel=["']canonical["'][^>]*>/i,
-            canonicalTag
-          );
-        } else {
-          output = html.replace('</head>', `  ${canonicalTag}\n</head>`);
-        }
+        // buildHeadTags: title + desc + canonical + OG + Twitter Card blogu
+        const { metaBlock } = buildHeadTags(relativePath, req.query);
+
+        let output = html;
+
+        // 1. Mevcut <title> tag'ini yenisiyle replace et
+        output = output.replace(/<title>[^<]*<\/title>/i, '');
+
+        // 2. Mevcut <meta name="description"...> tag'ini temizle
+        output = output.replace(/<meta\s+name=["']description["'][^>]*>/gi, '');
+
+        // 3. Mevcut <link rel="canonical"...> tag'ini temizle
+        output = output.replace(/<link[^>]+rel=["']canonical["'][^>]*>/gi, '');
+
+        // 4. Mevcut OG tag'lerini temizle (varsa)
+        output = output.replace(/<meta\s+property=["']og:[^"']+["'][^>]*>/gi, '');
+
+        // 5. Mevcut Twitter tag'lerini temizle (varsa)
+        output = output.replace(/<meta\s+name=["']twitter:[^"']+["'][^>]*>/gi, '');
+
+        // 6. Tam SEO bloğunu </head>'den hemen önce inject et
+        output = output.replace('</head>', `${metaBlock}\n</head>`);
 
         res.writeHead(200, { 'Content-Type': mime });
         res.end(output);

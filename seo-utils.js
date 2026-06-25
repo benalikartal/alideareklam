@@ -276,4 +276,200 @@ function buildRobotsTxt() {
   ].join('\n');
 }
 
-module.exports = { toSlug, toCanonical, buildSitemap, buildRobotsTxt, SITEMAP_PAGES, BASE_URL };
+// ─── PAGE META VERİ TABLOSU ──────────────────────────────────────────────────
+/**
+ * Her public sayfa için SEO ve sosyal medya meta verisi.
+ *
+ * title       : Tam <title> değeri — "Sayfa | Alidea Reklam ve Yazılım Ajansı" formatı
+ *               60-65 karakter arası hedeflenmiştir.
+ * description : Meta description — 150-160 karakter sınırı uygulanır (buildHeadTags içinde).
+ * ogType      : 'website' | 'article' | 'product'
+ * ogImage     : Sosyal medyada paylaşım görseli (1200×630 px önerilir)
+ * twitterCard : 'summary_large_image' | 'summary'
+ * keywords    : <meta name="keywords"> için anahtar kelime listesi
+ */
+const BRAND_SUFFIX = 'Alidea Reklam ve Yazılım Ajansı';
+const DEFAULT_OG_IMAGE = `${BASE_URL}/alidea_logo.png`;
+
+const PAGE_META = {
+
+  // ── Ana Sayfa ───────────────────────────────────────────────────────────────
+  '/index.html': {
+    title: `Ana Sayfa | ${BRAND_SUFFIX}`,
+    description: 'Markanızı yükseltmek için üst düzey stratejiyi kusursuz mühendislikle harmanlayan Türkiye\'nin yenilikçi dijital reklam ve yazılım inovasyon merkezi.',
+    ogType: 'website',
+    ogImage: `${BASE_URL}/alidea_logo.png`,
+    twitterCard: 'summary_large_image',
+    keywords: 'dijital ajans, reklam ajansı, yazılım geliştirme, 3D modelleme, video prodüksiyon, Türkiye',
+  },
+
+  // ── Portföy (Case Studies) ──────────────────────────────────────────────────
+  '/portfolio.html': {
+    title: `Portföy — Seçilmiş İşler | ${BRAND_SUFFIX}`,
+    description: '20M+ organik izlenme ve 50+ marka ile iş birliği. Ege Waffle, Zulu Coffee, Cakelab ve daha fazlası için ürettiğimiz kreatif çalışmalar.',
+    ogType: 'website',
+    ogImage: `${BASE_URL}/ornek.png`,           // Portföy kapak görseli
+    twitterCard: 'summary_large_image',
+    keywords: 'portföy, referanslar, kreatif çalışmalar, video prodüksiyon, sosyal medya içerikleri',
+  },
+
+  // ── Iarone (Proje / Case Study) ─────────────────────────────────────────────
+  '/iarone.html': {
+    title: `Iarone — 2D\'den 3D/AR\'a SaaS Platformu | ${BRAND_SUFFIX}`,
+    description: 'Tek bir 2D görüntüden gerçek zamanlı 3D/AR modeli üreten tarayıcı tabanlı SaaS. Three.js WebGL motoru, sıfır kurulum, tüm cihaz desteği.',
+    ogType: 'product',
+    ogImage: `${BASE_URL}/png_alidea.png`,      // Iarone proje kapak görseli
+    twitterCard: 'summary_large_image',
+    keywords: 'Iarone, 3D modelleme, AR uygulama, SaaS, Three.js, WebGL, e-ticaret 3D',
+  },
+
+  // ── Websitesgo (Proje / Case Study) ─────────────────────────────────────────
+  '/websitesgo.html': {
+    title: `Websitesgo — Kurumsal Web ve E-Ticaret Altyapısı | ${BRAND_SUFFIX}`,
+    description: 'Core Web Vitals optimize, Lighthouse 90+ skorlu kurumsal siteler ve e-ticaret platformları. SEO-first mimari, JSON-LD ve CDN dahil.',
+    ogType: 'product',
+    ogImage: `${BASE_URL}/png_websitesgo.png`,  // Websitesgo proje kapak görseli
+    twitterCard: 'summary_large_image',
+    keywords: 'Websitesgo, web geliştirme, e-ticaret, kurumsal site, Core Web Vitals, SEO',
+  },
+
+  // ── Ekip ────────────────────────────────────────────────────────────────────
+  '/team.html': {
+    title: `Ekibimiz | ${BRAND_SUFFIX}`,
+    description: 'Tasarım, mühendislik ve kreatif prodüksiyonu tek çatı altında buluşturan Alidea ekibini tanıyın. İnovasyon merkezimizin arkasındaki insanlar.',
+    ogType: 'website',
+    ogImage: `${BASE_URL}/alidea_logo.png`,
+    twitterCard: 'summary_large_image',
+    keywords: 'Alidea ekip, dijital ajans ekibi, yazılım mühendisleri, kreatif direktör',
+  },
+
+  // ── Referans: Ege Waffle (Case Study) ───────────────────────────────────────
+  '/referans/ege-waffle': {
+    title: `Ege Waffle — Marka Yolculuğu | ${BRAND_SUFFIX}`,
+    description: 'Ege Waffle için üretilen sosyal medya içerikleri, video kurgu ve marka görselleri. Alidea\'nın kreatif prodüksiyon sürecine bakış.',
+    ogType: 'article',
+    ogImage: `${BASE_URL}/ege_waffle_yeni.jpg`, // Proje kapak görseli (thumbnail)
+    twitterCard: 'summary_large_image',
+    keywords: 'Ege Waffle, marka yolculuğu, sosyal medya içeriği, kreatif prodüksiyon',
+  },
+
+  // ── Referans: Zulu Coffee (Case Study) ──────────────────────────────────────
+  '/referans/zulu-coffee': {
+    title: `Zulu Coffee — Marka Kimliği | ${BRAND_SUFFIX}`,
+    description: 'Zulu Coffee için sosyal medya görsel kimliği, video içerik üretimi ve marka estetiği geliştirme süreci.',
+    ogType: 'article',
+    ogImage: `${BASE_URL}/zulucoffe.png`,
+    twitterCard: 'summary_large_image',
+    keywords: 'Zulu Coffee, marka kimliği, kahve markası, sosyal medya tasarımı',
+  },
+
+  // ── Referans: Cakelab (Case Study) ──────────────────────────────────────────
+  '/referans/cakelab-by-alpnar': {
+    title: `Cakelab by Alpnar — Dijital Dönüşüm | ${BRAND_SUFFIX}`,
+    description: 'Cakelab by Alpnar için sosyal medya içerik stratejisi, ürün fotoğrafçılığı ve video prodüksiyon hizmetleri.',
+    ogType: 'article',
+    ogImage: `${BASE_URL}/cakelabbyalpnar.jpg`,
+    twitterCard: 'summary_large_image',
+    keywords: 'Cakelab, Alpnar, pastane markası, içerik üretimi, sosyal medya',
+  },
+
+  // ── Referans: Cafeinn (Case Study) ──────────────────────────────────────────
+  '/referans/cafeinn': {
+    title: `Cafeinn — Dijital Strateji | ${BRAND_SUFFIX}`,
+    description: 'Cafeinn için üretilen dijital reklam kampanyaları ve sosyal medya içerikleri. Alidea kreatif yaklaşımı.',
+    ogType: 'article',
+    ogImage: `${BASE_URL}/cafeinnpng.jpg`,
+    twitterCard: 'summary_large_image',
+    keywords: 'Cafeinn, kafe markası, dijital reklam, Instagram içeriği',
+  },
+
+};
+
+// ─── DESCRIPTION KISALTICI ───────────────────────────────────────────────────
+/**
+ * Description'ı 155 karaktere kısaltır, kelime ortasında kesmez.
+ * @param {string} desc
+ * @returns {string}
+ */
+function trimDescription(desc) {
+  if (!desc || desc.length <= 155) return desc;
+  const cut = desc.substring(0, 155).lastIndexOf(' ');
+  return desc.substring(0, cut > 100 ? cut : 152) + '…';
+}
+
+// ─── HEAD TAG BUILDER ─────────────────────────────────────────────────────────
+/**
+ * Verilen dosya path'i için eksiksiz SEO + OG + Twitter Card tag bloğunu üretir.
+ * Sunucu tarafında HTML string'e inject edilmek üzere tasarlanmıştır.
+ *
+ * @param {string} filePath   - '/' ile başlayan path (örn. '/iarone.html')
+ * @param {string} [reqQuery] - Querystring (proje thumbnail dinamik override için)
+ * @returns {{ title: string, metaBlock: string, meta: Object }}
+ */
+function buildHeadTags(filePath, reqQuery) {
+  // Normalize: .html ile veya .html olmadan arama yap
+  const normalizedPath = filePath.replace(/\.html$/i, '');
+  const meta =
+    PAGE_META[filePath] ||
+    PAGE_META[normalizedPath + '.html'] ||
+    PAGE_META[normalizedPath] ||
+    null;
+
+  // Fallback değerler
+  const title       = meta?.title       || `${BRAND_SUFFIX}`;
+  const rawDesc     = meta?.description || 'Markanızı yükseltmek için üst düzey stratejiyi kusursuz mühendislikle harmanlayan dijital reklam ve yazılım ajansı.';
+  const description = trimDescription(rawDesc);
+  const ogType      = meta?.ogType      || 'website';
+  const twitterCard = meta?.twitterCard || 'summary_large_image';
+  const keywords    = meta?.keywords    || 'dijital ajans, yazılım, reklam, Türkiye';
+
+  // OG image: querystring override > sayfa tanımı > varsayılan logo
+  const ogImage = (reqQuery && reqQuery.thumbnail)
+    ? `${BASE_URL}/${reqQuery.thumbnail}`
+    : (meta?.ogImage || DEFAULT_OG_IMAGE);
+
+  const canonicalUrl = toCanonical(filePath);
+
+  const tags = [
+    `    <title>${title}</title>`,
+    `    <meta name="description" content="${description}" />`,
+    `    <meta name="keywords" content="${keywords}" />`,
+    `    <meta name="author" content="Alidea" />`,
+    `    <meta name="robots" content="index, follow" />`,
+    `    <link rel="canonical" href="${canonicalUrl}" />`,
+    ``,
+    `    <!-- Open Graph / Facebook / WhatsApp / LinkedIn -->`,
+    `    <meta property="og:type"        content="${ogType}" />`,
+    `    <meta property="og:url"         content="${canonicalUrl}" />`,
+    `    <meta property="og:title"       content="${title}" />`,
+    `    <meta property="og:description" content="${description}" />`,
+    `    <meta property="og:image"       content="${ogImage}" />`,
+    `    <meta property="og:image:width"  content="1200" />`,
+    `    <meta property="og:image:height" content="630" />`,
+    `    <meta property="og:locale"      content="tr_TR" />`,
+    `    <meta property="og:site_name"   content="Alidea" />`,
+    ``,
+    `    <!-- Twitter Card -->`,
+    `    <meta name="twitter:card"        content="${twitterCard}" />`,
+    `    <meta name="twitter:site"        content="@alideaofficial" />`,
+    `    <meta name="twitter:creator"     content="@alideaofficial" />`,
+    `    <meta name="twitter:title"       content="${title}" />`,
+    `    <meta name="twitter:description" content="${description}" />`,
+    `    <meta name="twitter:image"       content="${ogImage}" />`,
+  ].join('\n');
+
+  return { title, description, ogImage, canonicalUrl, metaBlock: tags };
+}
+
+module.exports = {
+  toSlug,
+  toCanonical,
+  buildSitemap,
+  buildRobotsTxt,
+  buildHeadTags,
+  trimDescription,
+  SITEMAP_PAGES,
+  PAGE_META,
+  BASE_URL,
+  BRAND_SUFFIX,
+};
