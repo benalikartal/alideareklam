@@ -5,3 +5,4 @@ data/*.db-*
 .DS_Store
 *.mp4
 *.pdf
+.vercel
