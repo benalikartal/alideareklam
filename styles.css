@@ -2280,3 +2280,182 @@ body.light-theme {
         background: #0f0f13 !important;
     }
 }
+
+/* --- FAQ / SSS SECTION --- */
+.faq-section {
+    padding: 8rem 2rem;
+    max-width: 860px;
+    margin: 0 auto;
+}
+
+.faq-header {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.faq-subtitle {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    margin: 0.75rem auto 0;
+    max-width: 420px;
+    text-align: center;
+}
+
+.faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border-top: 1px solid var(--border-color);
+}
+
+.faq-item {
+    border-bottom: 1px solid var(--border-color);
+}
+
+.faq-trigger {
+    width: 100%;
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 1.5rem 0;
+    font-family: var(--font-stack);
+    font-size: 1.0625rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+    text-align: left;
+    transition: color 0.2s ease;
+}
+
+.faq-trigger:hover { color: rgba(0,0,0,0.55); }
+
+.faq-icon {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    transition: border-color 0.25s ease, background 0.25s ease, transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+}
+
+.faq-icon::before,
+.faq-icon::after {
+    content: '';
+    position: absolute;
+    background: var(--text-primary);
+    border-radius: 2px;
+    transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), opacity 0.25s ease;
+}
+.faq-icon::before { width: 10px; height: 1.5px; }
+.faq-icon::after  { width: 1.5px; height: 10px; }
+
+.faq-item.faq-open .faq-icon {
+    background: var(--text-primary);
+    border-color: var(--text-primary);
+    transform: rotate(45deg);
+}
+.faq-item.faq-open .faq-icon::before,
+.faq-item.faq-open .faq-icon::after { background: #fff; }
+
+/* Answer panel */
+.faq-answer {
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 0.32s cubic-bezier(0.4,0,0.2,1), opacity 0.25s ease;
+}
+
+.faq-answer[hidden] {
+    display: block !important;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.faq-answer-inner {
+    padding: 0 0 1.75rem 0;
+}
+
+.faq-answer-inner p {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    max-width: none;
+}
+
+/* FAQ list */
+.faq-metrics-list {
+    list-style: none;
+    padding: 0;
+    margin: 0.75rem 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.faq-metrics-list li {
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    padding-left: 1.25rem;
+    position: relative;
+}
+
+.faq-metrics-list li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: rgba(0,0,0,0.25);
+    font-size: 0.75rem;
+    top: 0.2em;
+}
+
+.faq-metrics-list li strong { color: var(--text-primary); font-weight: 600; }
+
+/* Metric chip grid */
+.faq-metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 0.75rem;
+    flex-direction: unset;
+}
+
+.faq-metrics-grid li::before { display: none; }
+
+.metric-chip {
+    background: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 1rem 1.25rem !important;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.chip-value {
+    font-size: 1.375rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+}
+
+.chip-label {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+@media (max-width: 768px) {
+    .faq-section { padding: 5rem 1.25rem; }
+    .faq-trigger { font-size: 0.9375rem; padding: 1.25rem 0; }
+    .faq-metrics-grid { grid-template-columns: 1fr 1fr; }
+}

@@ -205,3 +205,54 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+// --- FAQ ACCORDION ---
+document.addEventListener('DOMContentLoaded', () => {
+    const faqTriggers = document.querySelectorAll('.faq-trigger');
+
+    faqTriggers.forEach(trigger => {
+        trigger.addEventListener('click', () => {
+            const isExpanded = trigger.getAttribute('aria-expanded') === 'true';
+            const targetId = trigger.getAttribute('aria-controls');
+            const answer = document.getElementById(targetId);
+
+            // Diğer açık olanları kapat
+            faqTriggers.forEach(other => {
+                if (other !== trigger) {
+                    const otherId = other.getAttribute('aria-controls');
+                    const otherAnswer = document.getElementById(otherId);
+                    other.setAttribute('aria-expanded', 'false');
+                    other.closest('.faq-item').classList.remove('faq-open');
+                    if (otherAnswer) {
+                        otherAnswer.style.maxHeight = null;
+                        otherAnswer.removeAttribute('style');
+                        setTimeout(() => { otherAnswer.hidden = true; }, 320);
+                    }
+                }
+            });
+
+            // Bu elemanı toggle et
+            if (isExpanded) {
+                trigger.setAttribute('aria-expanded', 'false');
+                trigger.closest('.faq-item').classList.remove('faq-open');
+                answer.style.maxHeight = answer.scrollHeight + 'px';
+                requestAnimationFrame(() => {
+                    answer.style.maxHeight = null;
+                    answer.style.opacity = '0';
+                });
+                setTimeout(() => { answer.hidden = true; answer.style.opacity = ''; }, 320);
+            } else {
+                trigger.setAttribute('aria-expanded', 'true');
+                trigger.closest('.faq-item').classList.add('faq-open');
+                answer.hidden = false;
+                answer.style.maxHeight = '0px';
+                answer.style.opacity = '0';
+                requestAnimationFrame(() => {
+                    answer.style.maxHeight = answer.scrollHeight + 'px';
+                    answer.style.opacity = '1';
+                });
+                setTimeout(() => { answer.style.maxHeight = 'none'; }, 320);
+            }
+        });
+    });
+});
