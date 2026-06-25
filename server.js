@@ -185,17 +185,21 @@ app.get('/{*path}', (req, res) => {
 // Veritabanını başlat (seed dahil)
 require('./backend/db');
 
-app.listen(PORT, () => {
-  console.log('');
-  console.log('  ✅  Alidea Medya Sunucusu Başlatıldı!');
-  console.log('');
-  console.log(`  🌐  Site          →  http://localhost:${PORT}`);
-  console.log(`  🔐  Admin Girişi  →  http://localhost:${PORT}/admin-login.html`);
-  console.log(`  📊  Admin Panel   →  http://localhost:${PORT}/admin-dashboard.html`);
-  console.log('');
-  console.log('  ⚠️   admin-dashboard.html direkt açılamaz — giriş gerekir');
-  console.log('  🔒  Şifreler .env dosyasında, kaynak kodda görünmez');
-  console.log('');
-  console.log('  Durdurmak için Ctrl+C');
-  console.log('');
-});
+if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log('');
+    console.log('  ✅  Alidea Medya Sunucusu Başlatıldı!');
+    console.log('');
+    console.log(`  🌐  Site          →  http://localhost:${PORT}`);
+    console.log(`  🔐  Admin Girişi  →  http://localhost:${PORT}/admin-login.html`);
+    console.log(`  📊  Admin Panel   →  http://localhost:${PORT}/admin-dashboard.html`);
+    console.log('');
+    console.log('  ⚠️   admin-dashboard.html direkt açılamaz — giriş gerekir');
+    console.log('  🔒  Şifreler .env dosyasında, kaynak kodda görünmez');
+    console.log('');
+    console.log('  Durdurmak için Ctrl+C');
+    console.log('');
+  });
+}
+
+module.exports = app;
